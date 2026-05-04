@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -36,7 +36,7 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 900,
-          padding: scrolled ? '16px 48px' : '28px 48px',
+          padding: scrolled ? '16px clamp(20px, 5vw, 48px)' : 'clamp(20px, 4vw, 28px) clamp(20px, 5vw, 48px)',
           transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           background: scrolled
             ? 'rgba(248, 249, 250, 0.92)'

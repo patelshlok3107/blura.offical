@@ -8,7 +8,7 @@ export default function Footer() {
     <footer style={{
       background: 'var(--bg-secondary)',
       borderTop: '1px solid var(--silver-light)',
-      padding: '80px 48px 40px',
+      padding: 'clamp(40px, 8vw, 80px) clamp(20px, 5vw, 48px) clamp(24px, 4vw, 40px)',
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <div style={{
@@ -180,13 +180,15 @@ export default function Footer() {
 
         <div className="divider" style={{ marginBottom: '32px' }} />
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px',
-        }}>
+        <div
+          className="footer-bottom"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '16px',
+          }}>
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: '11px',

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useRef, useState } from 'react';
 
 export default function BulkInquirySection() {
@@ -142,7 +142,9 @@ export default function BulkInquirySection() {
           padding: '40px',
           borderRadius: '16px',
           boxShadow: 'var(--shadow-soft)',
-        }}>
+        }}
+          className="inquiry-card"
+        >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }} className="responsive-form-row">
               <input 

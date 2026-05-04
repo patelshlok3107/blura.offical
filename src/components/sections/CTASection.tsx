@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 
@@ -174,6 +174,7 @@ export default function CTASection() {
         {/* Buttons */}
         <div
           data-reveal
+          className="cta-buttons"
           style={{
             opacity: 0,
             transform: 'translateY(30px)',

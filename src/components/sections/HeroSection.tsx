@@ -105,17 +105,19 @@ export default function HeroSection() {
       </div>
 
       {/* Main content */}
-      <div style={{
-        position: 'relative',
-        zIndex: 10,
-        textAlign: 'center',
-        padding: '120px 24px 80px',
-        maxWidth: '1200px',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}>
+      <div
+        className="hero-content"
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          textAlign: 'center',
+          padding: 'clamp(80px, 12vw, 120px) 20px clamp(60px, 8vw, 80px)',
+          maxWidth: '1200px',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}>
         {/* Top label */}
         <div
           ref={textRef}

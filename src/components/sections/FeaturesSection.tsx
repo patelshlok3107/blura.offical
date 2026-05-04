@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useRef } from 'react';
 
 const features = [
@@ -143,6 +143,7 @@ export default function FeaturesSection() {
               key={feature.id}
               id={feature.id}
               data-feature
+              className="feature-left-item"
               style={{
                 opacity: 0,
                 transform: 'translateX(-30px)',
@@ -153,7 +154,7 @@ export default function FeaturesSection() {
               }}
             >
               {/* Content */}
-              <div style={{ flex: 1, textAlign: 'right' }}>
+              <div className="feature-text" style={{ flex: 1, textAlign: 'right' }}>
                 <div style={{
                   fontFamily: "'Inter', sans-serif",
                   fontSize: '13px',
@@ -175,7 +176,7 @@ export default function FeaturesSection() {
                 </div>
               </div>
               {/* Connector */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
+              <div className="feature-connector" style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
                 <div style={{
                   width: '32px',
                   height: '1px',
@@ -246,7 +247,7 @@ export default function FeaturesSection() {
               }}
             >
               {/* Connector */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
+              <div className="feature-connector" style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
                 <div style={{
                   width: '8px',
                   height: '8px',

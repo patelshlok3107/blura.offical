@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useRef } from 'react';
 
 export default function LifestyleSection() {
@@ -53,7 +53,7 @@ export default function LifestyleSection() {
         zIndex: 1,
       }}>
         {/* Big headline */}
-        <div style={{ marginBottom: '100px', textAlign: 'center' }}>
+        <div className="lifestyle-headline" style={{ marginBottom: 'clamp(48px, 8vw, 100px)', textAlign: 'center' }}>
           <div
             data-reveal
             style={{
