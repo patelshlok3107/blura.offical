@@ -1,8 +1,9 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { status } = await req.json();
     
     if (!status || !['new', 'contacted', 'closed'].includes(status)) {
@@ -12,7 +13,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     const result = await sql`
       UPDATE inquiries 
       SET status = ${status} 
-      WHERE id = ${parseInt(params.id, 10)}
+      WHERE id = ${parseInt(id, 10)}
     `;
 
     if (result.rowCount === 0) {
