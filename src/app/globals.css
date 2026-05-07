@@ -3,17 +3,16 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #F8F9FA;
-  --bg-secondary: #EDEFF2;
-  --bg-tertiary: #E4E8ED;
-  --accent-blue: #2F5B8C;
-  --accent-blue-light: #4A7AB5;
-  --dark-blue: #1C3557;
-  --text-primary: #111111;
-  --text-secondary: #6B7280;
-  --text-tertiary: #9CA3AF;
-  --silver: #C8CDD4;
-  --silver-light: #E8EAED;
+  --bg-primary: #f0f4f8; /* Signature Himalayan Mist */
+  --bg-secondary: #ffffff;
+  --text-primary: #1c3557;
+  --text-secondary: #4a6a8a;
+  --text-tertiary: #8ba3bd;
+  --accent-blue: #2f5b8c;
+  --accent-light: #e1e9f1;
+  --gold: #c5a059;
+  --white: #ffffff;
+  --border-color: rgba(47, 91, 140, 0.1);
   --glass-bg: rgba(248, 249, 250, 0.7);
   --glass-border: rgba(255, 255, 255, 0.5);
   --shadow-soft: 0 4px 40px rgba(0, 0, 0, 0.06);
