@@ -175,7 +175,7 @@ export default function Footer() {
                 fontWeight: '300',
                 color: 'var(--text-secondary)',
               }}>
-                NIKOL AHMEDABAD-382350<br />GUJARAT, INDIA
+                A-502 KENS AVLON,<br />OPP. SADGURU VATIKA,<br />NIKOL, AHMEDABAD-382350,<br />GUJARAT, INDIA
               </span>
             </div>
           </div>
