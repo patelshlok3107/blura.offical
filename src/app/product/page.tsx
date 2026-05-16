@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useRef, useEffect } from 'react';
 
 const tabs = ['Overview', 'Minerals', 'Benefits', 'Source Story', 'Packaging'];
@@ -44,6 +44,21 @@ export default function ProductPage() {
 
   const onMouseUp = () => setIsDragging(false);
 
+  // Touch events for mobile
+  const onTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    lastX.current = e.touches[0].clientX;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const dx = e.touches[0].clientX - lastX.current;
+    lastX.current = e.touches[0].clientX;
+    setDragRotation(prev => prev + dx * 0.6);
+  };
+
+  const onTouchEnd = () => setIsDragging(false);
+
   return (
     <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', paddingTop: '80px' }}>
       {/* Hero */}
@@ -76,6 +91,9 @@ export default function ProductPage() {
               onMouseMove={onMouseMove}
               onMouseUp={onMouseUp}
               onMouseLeave={onMouseUp}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
               style={{
                 cursor: isDragging ? 'grabbing' : 'grab',
                 userSelect: 'none',
@@ -224,7 +242,7 @@ export default function ProductPage() {
               color: 'var(--text-tertiary)',
               marginTop: '16px',
             }}>
-              ← Drag the can to rotate it
+              ← Drag or swipe the can to rotate it
             </p>
           </div>
         </div>
@@ -334,7 +352,7 @@ export default function ProductPage() {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
               {minerals.map((mineral, i) => (
-                <div key={mineral.name} style={{
+                <div key={mineral.name} className="mineral-row" style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 120px 1fr',
                   alignItems: 'center',
@@ -342,26 +360,9 @@ export default function ProductPage() {
                   borderBottom: '1px solid var(--silver-light)',
                   animation: `fadeInUp 0.4s ease ${i * 0.06}s both`,
                 }}>
-                  <div style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: '14px',
-                    fontWeight: '400',
-                    color: 'var(--text-primary)',
-                  }}>{mineral.name}</div>
-                  <div style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: '28px',
-                    fontWeight: '300',
-                    color: 'var(--dark-blue)',
-                    textAlign: 'center',
-                  }}>{mineral.value} <span style={{ fontSize: '12px', fontFamily: 'Inter', fontWeight: '300', color: 'var(--text-tertiary)' }}>{mineral.unit}</span></div>
-                  <div style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: '12px',
-                    fontWeight: '300',
-                    color: 'var(--text-tertiary)',
-                    textAlign: 'right',
-                  }}>{mineral.note}</div>
+                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', fontWeight: '400', color: 'var(--text-primary)' }}>{mineral.name}</div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '28px', fontWeight: '300', color: 'var(--dark-blue)', textAlign: 'center' }}>{mineral.value} <span style={{ fontSize: '12px', fontFamily: 'Inter', fontWeight: '300', color: 'var(--text-tertiary)' }}>{mineral.unit}</span></div>
+                  <div className="mineral-note" style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: '300', color: 'var(--text-tertiary)', textAlign: 'right' }}>{mineral.note}</div>
                 </div>
               ))}
             </div>

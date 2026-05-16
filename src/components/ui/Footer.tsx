@@ -11,12 +11,15 @@ export default function Footer() {
       padding: 'clamp(40px, 8vw, 80px) clamp(20px, 5vw, 48px) clamp(24px, 4vw, 40px)',
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '60px',
-          marginBottom: '80px',
-        }}>
+        <div
+          className="footer-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '60px',
+            marginBottom: '80px',
+          }}
+        >
           {/* Brand */}
           <div>
             <div style={{
@@ -172,7 +175,7 @@ export default function Footer() {
                 fontWeight: '300',
                 color: 'var(--text-secondary)',
               }}>
-                Kathmandu, Singpur<br />Dist. Rajkot, Gujarat 382430
+                NIKOL AHMEDABAD-382350<br />GUJARAT, INDIA
               </span>
             </div>
           </div>

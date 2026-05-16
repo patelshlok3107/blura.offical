@@ -7,7 +7,6 @@ const features = [
     label: 'Natural Mineral Composition',
     description: 'Calcium, Magnesium, Potassium — precisely as nature intended.',
     position: 'left',
-    top: '12%',
     icon: '⬡',
   },
   {
@@ -15,7 +14,6 @@ const features = [
     label: 'Himalayan Source',
     description: 'Sourced from protected springs in the Himalayan foothills.',
     position: 'left',
-    top: '35%',
     icon: '◈',
   },
   {
@@ -23,7 +21,6 @@ const features = [
     label: 'Electrolyte Balance',
     description: 'pH 7.4 — perfectly balanced for optimal absorption.',
     position: 'left',
-    top: '58%',
     icon: '◇',
   },
   {
@@ -31,7 +28,6 @@ const features = [
     label: 'Premium Aluminium',
     description: '500ml of purity in an infinitely recyclable aluminium can.',
     position: 'right',
-    top: '22%',
     icon: '◉',
   },
   {
@@ -39,7 +35,6 @@ const features = [
     label: 'Eco-Friendly Design',
     description: 'Zero plastic. 100% aluminium. One giant step for the planet.',
     position: 'right',
-    top: '48%',
     icon: '◎',
   },
 ];
@@ -82,59 +77,44 @@ export default function FeaturesSection() {
         overflow: 'hidden',
       }}
     >
-      {/* Background abstract element to fill space */}
+      {/* Background abstract elements */}
       <div style={{
-        position: 'absolute',
-        top: '20%',
-        left: '-10%',
-        width: '800px',
-        height: '800px',
+        position: 'absolute', top: '20%', left: '-10%',
+        width: '800px', height: '800px',
         background: 'radial-gradient(circle, rgba(47,91,140,0.04) 0%, transparent 60%)',
-        borderRadius: '50%',
-        pointerEvents: 'none',
+        borderRadius: '50%', pointerEvents: 'none',
       }} />
       <div style={{
-        position: 'absolute',
-        bottom: '-10%',
-        right: '-10%',
-        width: '600px',
-        height: '600px',
+        position: 'absolute', bottom: '-10%', right: '-10%',
+        width: '600px', height: '600px',
         background: 'radial-gradient(circle, rgba(47,91,140,0.03) 0%, transparent 70%)',
-        borderRadius: '50%',
-        pointerEvents: 'none',
+        borderRadius: '50%', pointerEvents: 'none',
       }} />
+
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '80px' }}>
         <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: '10px',
-          fontWeight: '500',
-          letterSpacing: '0.25em',
-          textTransform: 'uppercase',
-          color: 'var(--accent-blue)',
-          marginBottom: '16px',
+          fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: '500',
+          letterSpacing: '0.25em', textTransform: 'uppercase',
+          color: 'var(--accent-blue)', marginBottom: '16px',
         }}>What&apos;s Inside</p>
         <h2 style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: 'clamp(36px, 6vw, 72px)',
-          fontWeight: '300',
-          color: 'var(--dark-blue)',
-          letterSpacing: '-0.02em',
+          fontWeight: '300', color: 'var(--dark-blue)', letterSpacing: '-0.02em',
         }}>
           Engineered by Nature
         </h2>
       </div>
 
-      {/* Feature layout */}
-      <div style={{
-        maxWidth: '1100px',
-        margin: '0 auto',
-        display: 'grid',
-        gridTemplateColumns: '1fr 260px 1fr',
-        gap: '40px',
-        alignItems: 'center',
-      }}
+      {/* Desktop: 3-col grid | Mobile: 1-col card list */}
+      <div
         className="feature-layout"
+        style={{
+          maxWidth: '1100px', margin: '0 auto',
+          display: 'grid', gridTemplateColumns: '1fr 260px 1fr',
+          gap: '40px', alignItems: 'center',
+        }}
       >
         {/* Left features */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
@@ -153,43 +133,17 @@ export default function FeaturesSection() {
                 gap: '20px',
               }}
             >
-              {/* Content */}
               <div className="feature-text" style={{ flex: 1, textAlign: 'right' }}>
-                <div style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '13px',
-                  fontWeight: '500',
-                  color: 'var(--dark-blue)',
-                  marginBottom: '6px',
-                  letterSpacing: '0.02em',
-                }}>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: '500', color: 'var(--dark-blue)', marginBottom: '6px', letterSpacing: '0.02em' }}>
                   {feature.label}
                 </div>
-                <div style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '12px',
-                  fontWeight: '300',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.6,
-                }}>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: '300', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                   {feature.description}
                 </div>
               </div>
-              {/* Connector */}
               <div className="feature-connector" style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
-                <div style={{
-                  width: '32px',
-                  height: '1px',
-                  background: 'linear-gradient(90deg, transparent, var(--accent-blue))',
-                }} />
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  border: '1.5px solid var(--accent-blue)',
-                  background: 'var(--bg-primary)',
-                  flexShrink: 0,
-                }} />
+                <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, transparent, var(--accent-blue))' }} />
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid var(--accent-blue)', background: 'var(--bg-primary)', flexShrink: 0 }} />
               </div>
             </div>
           ))}
@@ -198,33 +152,22 @@ export default function FeaturesSection() {
         {/* Center can */}
         <div
           data-feature
+          className="feature-center-can"
           style={{
-            opacity: 0,
-            transform: 'translateY(20px)',
+            opacity: 0, transform: 'translateY(20px)',
             transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1)',
-            display: 'flex',
-            justifyContent: 'center',
-            position: 'relative',
+            display: 'flex', justifyContent: 'center', position: 'relative',
           }}
         >
-          {/* Soft glow */}
-          <div style={{
-            position: 'absolute',
-            inset: '-40px',
-            background: 'radial-gradient(circle, rgba(47,91,140,0.06) 0%, transparent 70%)',
-            borderRadius: '50%',
-          }} />
+          <div style={{ position: 'absolute', inset: '-40px', background: 'radial-gradient(circle, rgba(47,91,140,0.06) 0%, transparent 70%)', borderRadius: '50%' }} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/can-white.png"
             alt="blüra can features"
             style={{
-              width: '100%',
-              maxWidth: '220px',
-              height: 'auto',
+              width: '100%', maxWidth: '220px', height: 'auto',
               filter: 'drop-shadow(0 20px 60px rgba(47,91,140,0.15))',
-              position: 'relative',
-              zIndex: 1,
+              position: 'relative', zIndex: 1,
               animation: 'floatSlow 6s ease-in-out infinite',
             }}
           />
@@ -237,6 +180,7 @@ export default function FeaturesSection() {
               key={feature.id}
               id={feature.id}
               data-feature
+              className="feature-right-item"
               style={{
                 opacity: 0,
                 transform: 'translateX(30px)',
@@ -246,41 +190,15 @@ export default function FeaturesSection() {
                 gap: '20px',
               }}
             >
-              {/* Connector */}
               <div className="feature-connector" style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  border: '1.5px solid var(--accent-blue)',
-                  background: 'var(--bg-primary)',
-                  flexShrink: 0,
-                }} />
-                <div style={{
-                  width: '32px',
-                  height: '1px',
-                  background: 'linear-gradient(90deg, var(--accent-blue), transparent)',
-                }} />
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid var(--accent-blue)', background: 'var(--bg-primary)', flexShrink: 0 }} />
+                <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, var(--accent-blue), transparent)' }} />
               </div>
-              {/* Content */}
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '13px',
-                  fontWeight: '500',
-                  color: 'var(--dark-blue)',
-                  marginBottom: '6px',
-                  letterSpacing: '0.02em',
-                }}>
+              <div className="feature-text" style={{ flex: 1 }}>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: '500', color: 'var(--dark-blue)', marginBottom: '6px', letterSpacing: '0.02em' }}>
                   {feature.label}
                 </div>
-                <div style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '12px',
-                  fontWeight: '300',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.6,
-                }}>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: '300', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                   {feature.description}
                 </div>
               </div>
@@ -288,17 +206,6 @@ export default function FeaturesSection() {
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .feature-layout {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
-
-

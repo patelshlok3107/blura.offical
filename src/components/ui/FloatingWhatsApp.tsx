@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useState } from 'react';
 
 export default function FloatingWhatsApp() {
@@ -20,6 +20,7 @@ export default function FloatingWhatsApp() {
 
   return (
     <a
+      className="floating-whatsapp"
       href="https://wa.me/917990394138?text=Hi,%20I%E2%80%99m%20interested%20in%20ordering%20bl%C3%BCra%20mineral%20water%20in%20bulk.%20Please%20share%20details."
       target="_blank"
       rel="noopener noreferrer"
@@ -31,7 +32,6 @@ export default function FloatingWhatsApp() {
         width: '60px',
         height: '60px',
         borderRadius: '50%',
-        backgroundColor: '#25D366', // WhatsApp Brand Green, or we can use dark blue? Prompt: "Soft whites + Blüra blue accents". Let's use Blüra blue to stay cinematic.
         background: 'var(--dark-blue)',
         color: 'white',
         display: 'flex',

@@ -3,21 +3,40 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #f0f4f8; /* Signature Himalayan Mist */
+  /* === Primary palette === */
+  --bg-primary: #f0f4f8;
   --bg-secondary: #ffffff;
+
+  /* === Text === */
   --text-primary: #1c3557;
   --text-secondary: #4a6a8a;
   --text-tertiary: #8ba3bd;
+
+  /* === Brand blues — both naming conventions kept for compatibility === */
   --accent-blue: #2f5b8c;
+  --accent-blue-light: #4a7ab5;
+  --dark-blue: #1c3557;
+
+  /* === Neutrals — kept for component compatibility === */
+  --silver: #c8cdd4;
+  --silver-light: #e8eaed;
   --accent-light: #e1e9f1;
+
+  /* === Accent === */
   --gold: #c5a059;
   --white: #ffffff;
   --border-color: rgba(47, 91, 140, 0.1);
+
+  /* === Glass === */
   --glass-bg: rgba(248, 249, 250, 0.7);
   --glass-border: rgba(255, 255, 255, 0.5);
+
+  /* === Shadows === */
   --shadow-soft: 0 4px 40px rgba(0, 0, 0, 0.06);
   --shadow-medium: 0 8px 60px rgba(0, 0, 0, 0.1);
   --shadow-strong: 0 20px 80px rgba(0, 0, 0, 0.15);
+
+  /* === Transitions === */
   --transition-slow: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-medium: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 0.4s cubic-bezier(0.16, 1, 0.3, 1);

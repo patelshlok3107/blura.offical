@@ -8,7 +8,9 @@ export default function HeroSection() {
   const mistRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Parallax on mouse move
+    // Only enable parallax on non-touch devices
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+
     const onMouseMove = (e: MouseEvent) => {
       const can = canRef.current;
       if (!can) return;
@@ -189,8 +191,8 @@ export default function HeroSection() {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '300px',
-            height: '300px',
+            width: 'clamp(160px, 40vw, 300px)',
+            height: 'clamp(160px, 40vw, 300px)',
             background: 'radial-gradient(circle, rgba(47,91,140,0.08) 0%, transparent 70%)',
             borderRadius: '50%',
             filter: 'blur(20px)',
