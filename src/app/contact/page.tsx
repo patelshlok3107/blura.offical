@@ -137,9 +137,10 @@ export default function ContactPage() {
                 lineHeight: 1.8,
                 color: 'var(--text-secondary)',
               }}>
-                Kathmandu Industrial Estate,<br />
-                Singpur, Kathmandu-Singpur<br />
-                Dist. Rajkot, Gujarat 382430
+                A-502 KENS AVLON,<br />
+                OPP. SADGURU VATIKA,<br />
+                NIKOL, AHMEDABAD-382350,<br />
+                GUJARAT, INDIA
               </p>
             </div>
 
