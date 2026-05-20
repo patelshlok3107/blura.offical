@@ -1,5 +1,6 @@
 import HeroSection from '@/components/sections/HeroSection';
 import PourSection from '@/components/sections/PourSection';
+import MarqueeSection from '@/components/sections/MarqueeSection';
 import GlassSection from '@/components/sections/GlassSection';
 import FeaturesSection from '@/components/sections/FeaturesSection';
 import BulkInquirySection from '@/components/sections/BulkInquirySection';
@@ -13,6 +14,7 @@ export default function HomePage() {
     <>
       <HeroSection />
       <PourSection />
+      <MarqueeSection />
       <GlassSection />
       <FeaturesSection />
       <BulkInquirySection />
