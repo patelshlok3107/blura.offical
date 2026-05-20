@@ -7,25 +7,16 @@ export default function LoadingScreen() {
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    // Prevent scrolling while loading
     document.body.style.overflow = 'hidden';
+    const totalDuration = 4000; // 4 seconds total
+    const interval = 40;
 
-    // Sequence timing
-    const totalDuration = 5000; // 5 seconds total
-
-    // Fade out screen slightly before end to blend with HeroSection
-    const fadeOutTimer = setTimeout(() => {
-      setIsFadingOut(true);
-    }, totalDuration - 800); 
-
-    // Remove component
+    const fadeOutTimer = setTimeout(() => setIsFadingOut(true), totalDuration - 800); 
     const finishTimer = setTimeout(() => {
       setLoading(false);
       document.body.style.overflow = '';
     }, totalDuration);
 
-    // Progress bar animation
-    const interval = 50;
     const progressTimer = setInterval(() => {
       setProgress((prev) => {
         const next = prev + (100 / (totalDuration / interval));
@@ -49,7 +40,10 @@ export default function LoadingScreen() {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background: 'var(--bg-primary)',
+        background: `
+          radial-gradient(ellipse 70% 60% at 50% 40%, rgba(47, 91, 140, 0.04) 0%, transparent 70%),
+          var(--bg-primary)
+        `,
         opacity: isFadingOut ? 0 : 1,
         transition: 'opacity 0.8s ease-in-out',
         display: 'flex',
@@ -59,134 +53,136 @@ export default function LoadingScreen() {
         overflow: 'hidden',
       }}
     >
-      {/* Background Layer: Mountain River with slow Ken Burns */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: '-5%',
-          backgroundImage: 'url(/images/loading-1.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          animation: 'kenBurnsBg 10s ease-out forwards',
-          // Fade opacity to match HeroSection (0.35) as progress nears 100
-          opacity: 0.8 - (0.45 * (progress / 100)),
-        }}
-      />
-
-      {/* Dark overlay that fades away as it loads to reveal light background */}
+      {/* Background Image - matches landing page exactly */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.8) 100%)',
-          opacity: 1 - (progress / 100),
+          backgroundImage: 'url(/images/hero-bg-v2.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%',
+          opacity: 0.35,
+          animation: 'kenBurnsBg 8s ease-out forwards',
         }}
       />
-      
-      {/* Light overlay that fades in as it loads (matches HeroSection) */}
+
+      {/* Light Overlay - matches landing page exactly */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background: 'linear-gradient(180deg, rgba(248,249,250,0.5) 0%, rgba(248,249,250,0.3) 40%, rgba(248,249,250,0.7) 100%)',
-          opacity: progress / 100,
         }}
       />
 
-      {/* Big Background Text: blüra */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(120px, 25vw, 400px)',
-          fontWeight: '300',
-          color: 'rgba(255,255,255,0.15)', // Semi-transparent white
-          whiteSpace: 'nowrap',
-          letterSpacing: '-0.02em',
-          zIndex: 1,
-          // Subtle scale up animation
-          animation: 'scaleText 8s ease-out forwards',
-        }}
-      >
-        blüra
-      </div>
+      {/* Mist layers */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: '-10%',
+        right: '-10%',
+        height: '35%',
+        background: 'linear-gradient(to top, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0.6) 50%, transparent 100%)',
+      }} />
 
-      {/* Foreground Layer: The Can (Centered) */}
+      {/* Main Content Wrapper */}
       <div
         style={{
-          position: 'absolute',
-          bottom: '-10%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'clamp(200px, 30vw, 400px)',
-          height: '90%',
-          backgroundImage: 'url(/images/loading-2.png)',
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'bottom center',
-          zIndex: 2,
-          animation: 'floatSlow 4s ease-in-out infinite',
-        }}
-      />
-
-      {/* Bottom Right: Small Logo & Loading Bar */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '40px',
-          right: '50px',
+          position: 'relative',
+          zIndex: 10,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'flex-end',
-          gap: '12px',
-          zIndex: 3,
+          alignItems: 'center',
+          marginTop: '-5vh',
         }}
       >
+        {/* Animated Brand Name */}
         <div style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 'clamp(72px, 12vw, 160px)',
+          fontWeight: '300',
+          letterSpacing: '-0.04em',
+          lineHeight: 0.9,
+          color: 'var(--dark-blue)',
+          marginBottom: '20px',
+          animation: 'fadeInUp 1s ease forwards',
+        }}>
+          bl<span style={{ color: 'var(--accent-blue)' }}>ü</span>ra
+        </div>
+
+        {/* Floating Can */}
+        <div
+          style={{
+            position: 'relative',
+            width: 'clamp(180px, 22vw, 300px)',
+            height: 'auto',
+            animation: 'fadeInUp 1.2s ease forwards, floatSlow 4s ease-in-out infinite',
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/can-white.png"
+            alt="blüra Can"
+            style={{
+              width: '100%',
+              height: 'auto',
+              filter: 'drop-shadow(0 30px 80px rgba(47, 91, 140, 0.2))',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Loading Bar at Bottom */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '10%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '12px',
+          zIndex: 10,
+          animation: 'fadeIn 1s ease forwards',
+          animationDelay: '0.5s',
+          opacity: 0,
+        }}
+      >
+        <span style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: '10px',
           fontWeight: '500',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color: progress > 80 ? 'var(--dark-blue)' : '#ffffff',
-          transition: 'color 1s ease',
+          color: 'var(--text-tertiary)',
         }}>
-          Loading...
-        </div>
+          {progress < 100 ? 'Preparing Experience' : 'Ready'}
+        </span>
         
-        {/* Progress Bar Container */}
+        {/* Progress Bar */}
         <div style={{
-          width: '200px',
-          height: '3px',
-          background: 'rgba(128,128,128,0.3)',
+          width: 'clamp(150px, 20vw, 250px)',
+          height: '2px',
+          background: 'rgba(47, 91, 140, 0.1)',
           borderRadius: '2px',
           overflow: 'hidden',
           position: 'relative',
         }}>
-          {/* Progress Bar Fill */}
           <div style={{
             position: 'absolute',
             top: 0, left: 0, bottom: 0,
             width: `${progress}%`,
-            background: progress > 80 ? 'var(--accent-blue)' : '#ffffff',
-            transition: 'width 0.1s linear, background 1s ease',
+            background: 'var(--accent-blue)',
+            transition: 'width 0.1s linear',
           }} />
         </div>
       </div>
-      
-      {/* Inline styles for Ken Burns */}
+
       <style>{`
         @keyframes kenBurnsBg {
           0% { transform: scale(1) translate(0, 0); }
-          100% { transform: scale(1.15) translate(-1%, -1%); }
-        }
-        @keyframes scaleText {
-          0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
-          20% { opacity: 1; }
-          100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.2; }
+          100% { transform: scale(1.1) translate(-1%, -1%); }
         }
       `}</style>
     </div>
