@@ -1,3 +1,4 @@
+import LoadingScreen from '@/components/ui/LoadingScreen';
 import HeroSection from '@/components/sections/HeroSection';
 import PourSection from '@/components/sections/PourSection';
 import GlassSection from '@/components/sections/GlassSection';
@@ -11,6 +12,7 @@ import CTASection from '@/components/sections/CTASection';
 export default function HomePage() {
   return (
     <>
+      <LoadingScreen />
       <HeroSection />
       <PourSection />
       <GlassSection />
