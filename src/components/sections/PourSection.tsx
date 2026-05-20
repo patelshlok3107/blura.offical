@@ -77,14 +77,22 @@ export default function PourSection() {
     );
   }
 
-  /* ---- DESKTOP LAYOUT (original sticky parallax) ---- */
+  /* ---- DESKTOP LAYOUT ---- */
   return (
     <section
       ref={sectionRef}
       id="pour-section"
-      style={{ minHeight: '120vh', background: 'var(--bg-secondary)', position: 'relative', overflow: 'hidden' }}
+      style={{
+        height: '100vh',
+        background: 'var(--bg-secondary)',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      <div style={{ position: 'sticky', top: 0, height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
         <div ref={imageRef} style={{ position: 'absolute', inset: '-5%', transition: 'transform 0.1s linear' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
