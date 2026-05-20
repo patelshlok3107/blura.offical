@@ -58,9 +58,10 @@ export default function Navbar() {
           zIndex: 900,
           padding: scrolled ? '14px clamp(20px, 5vw, 48px)' : 'clamp(18px, 3vw, 28px) clamp(20px, 5vw, 48px)',
           transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-          background: scrolled ? 'rgba(248, 249, 250, 0.95)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(200,205,212,0.3)' : 'none',
+          background: scrolled ? '#ffffff' : 'transparent',
+          backdropFilter: 'none',
+          borderBottom: 'none',
+          boxShadow: scrolled ? '0 4px 30px rgba(28, 53, 87, 0.05)' : 'none',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1400px', margin: '0 auto' }}>
