@@ -100,7 +100,54 @@ export default function PourSection() {
             linear-gradient(90deg, rgba(248,249,250,0.7) 0%, transparent 30%, transparent 70%, rgba(248,249,250,0.7) 100%)
           `,
           pointerEvents: 'none',
+          zIndex: 1,
         }} />
+
+        {/* --- NEW COOL BACKGROUND ELEMENTS --- */}
+        {/* Huge scrolling watermark */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '100vw',
+          display: 'flex',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+          zIndex: 0,
+          opacity: 0.4,
+        }}>
+          <h1 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(150px, 25vw, 400px)',
+            fontWeight: '300',
+            color: 'transparent',
+            WebkitTextStroke: '2px rgba(47, 91, 140, 0.1)',
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.1em',
+            margin: 0,
+            lineHeight: 1,
+          }}>
+            BLÜRA
+          </h1>
+        </div>
+
+        {/* Subtle animated floating rings / droplets */}
+        {[1, 2, 3, 4, 5].map(i => (
+          <div key={i} style={{
+            position: 'absolute',
+            top: `${15 + i * 15}%`,
+            left: `${10 + (i % 2 === 0 ? 70 : 0) + i * 5}%`,
+            width: `${20 + i * 10}px`,
+            height: `${20 + i * 10}px`,
+            border: '1px solid rgba(47, 91, 140, 0.15)',
+            borderRadius: '50%',
+            zIndex: 0,
+            animation: `floatSlow ${4 + i}s ease-in-out infinite alternate`,
+            animationDelay: `${i * 0.5}s`,
+          }} />
+        ))}
+        {/* ---------------------------------- */}
         <div
           ref={overlayRef}
           className="pour-text-layout"
