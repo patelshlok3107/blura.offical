@@ -16,14 +16,13 @@ export default function LoadingScreen({
   const [progress, setProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLDivElement>(null);
   const hasTriggeredTransition = useRef(false);
 
-  // Counter logic
+  // Counter / Progress logic
   useEffect(() => {
     let start = 0;
     const end = 100;
-    const duration = 2200; // 2.2 seconds for loading progress
+    const duration = 2800; // 2.8 seconds for smooth liquid filling progress
     const range = end - start;
     let startTime: number | null = null;
 
@@ -64,35 +63,20 @@ export default function LoadingScreen({
       }
     });
 
-    // 1. Instantly fade out the counter so only the logo zooms
-    tl.to(counterRef.current, {
-      opacity: 0,
-      y: 20,
-      duration: 0.4,
-      ease: 'power2.out'
-    });
-
-    // 2. Zoom the logo in (scale up huge and fade out)
+    // 1. Zoom the fully filled logo in (scale up huge and fade out)
     tl.to(logoRef.current, {
       scale: 35,
       opacity: 0,
       duration: 1.8,
       ease: 'power4.inOut'
-    }, '-=0.2');
+    });
 
-    // 3. Fade out the main container
+    // 2. Fade out the main container
     tl.to(containerRef.current, {
       opacity: 0,
       duration: 1.5,
       ease: 'power3.inOut'
     }, '-=1.6');
-  };
-
-  // Helper to format the counter with leading zeros
-  const formatPercentage = (val: number) => {
-    if (val < 10) return `00${val}`;
-    if (val < 100) return `0${val}`;
-    return `${val}`;
   };
 
   return (
@@ -127,7 +111,7 @@ export default function LoadingScreen({
         }}
       />
 
-      {/* Main Logo Container */}
+      {/* Main Logo Container acting as the Progress Bar */}
       <div
         ref={logoRef}
         style={{
@@ -142,56 +126,78 @@ export default function LoadingScreen({
           willChange: 'transform, opacity',
         }}
       >
+        {/* Bottom Logo - transparent silhouette outline */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 
           src="/images/logo.png" 
-          alt="blüra Logo" 
+          alt="blüra Logo Outline" 
           style={{ 
             width: '100%', 
             height: 'auto',
-            filter: 'brightness(0) invert(0.95) drop-shadow(0 0 20px rgba(255, 255, 255, 0.05))', // Renders original logo in stunning soft silver-white
+            display: 'block',
+            opacity: 0.12, // Subtle, transparent outline
+            filter: 'brightness(0) invert(0.95)',
           }} 
         />
+
+        {/* Top Logo Wrapper - height matches progress level */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+            height: `${progress}%`, // Rising water level
+            overflow: 'hidden',
+            transition: 'height 0.12s linear',
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'flex-end',
+          }}
+        >
+          {/* Top Logo - glowing crystalline water-blue image overlay */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/images/logo.png" 
+            alt="blüra Logo Water Fill" 
+            style={{ 
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%', 
+              height: 'auto',
+              maxWidth: 'none',
+              // Water glow filter: white base with intense drop shadows in white/light-blue
+              filter: `brightness(0) invert(1) 
+                       drop-shadow(0 0 15px rgba(255, 255, 255, 0.7)) 
+                       drop-shadow(0 0 6px var(--accent-blue-light))`,
+            }} 
+          />
+
+          {/* Meniscus / Glowing water boundary line at top of fill */}
+          <div 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '3px',
+              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent)',
+              boxShadow: '0 0 10px rgba(255, 255, 255, 0.95), 0 0 4px var(--accent-blue-light)',
+              animation: 'wavyMeniscus 2.s ease-in-out infinite',
+              pointerEvents: 'none',
+              zIndex: 5,
+            }}
+          />
+        </div>
       </div>
 
-      {/* Modern minimalist percentage indicator */}
-      <div
-        ref={counterRef}
-        style={{
-          position: 'absolute',
-          bottom: '10%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          zIndex: 10,
-          willChange: 'opacity, transform',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "'Courier New', Courier, monospace",
-            fontSize: 'clamp(14px, 2vw, 18px)',
-            fontWeight: '300',
-            letterSpacing: '0.15em',
-            color: 'rgba(255, 255, 255, 0.7)',
-          }}
-        >
-          {formatPercentage(progress)}%
-        </span>
-        <span
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: '9px',
-            fontWeight: '400',
-            letterSpacing: '0.3em',
-            textTransform: 'uppercase',
-            color: 'rgba(255, 255, 255, 0.35)',
-          }}
-        >
-          PREPARING PURITY
-        </span>
-      </div>
+      <style>{`
+        @keyframes wavyMeniscus {
+          0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.8; }
+          50% { transform: scaleY(1.4) translateY(-1px); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }
