@@ -1,17 +1,26 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import Link from 'next/link';
+import { gsap } from 'gsap';
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  loadingState: 'loading' | 'transitioning' | 'loaded';
+}
+
+export default function HeroSection({ loadingState }: HeroSectionProps) {
   const canRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
   const mistRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const mountainsRef = useRef<HTMLDivElement>(null);
+  const scrollHintRef = useRef<HTMLDivElement>(null);
 
+  // Parallax movement effect
   useEffect(() => {
-    // Only enable parallax on non-touch devices
+    // Only enable parallax on non-touch devices and when loaded
     if (!window.matchMedia('(pointer: fine)').matches) return;
 
     const onMouseMove = (e: MouseEvent) => {
+      if (loadingState !== 'loaded') return;
       const can = canRef.current;
       if (!can) return;
       const centerX = window.innerWidth / 2;
@@ -22,6 +31,7 @@ export default function HeroSection() {
     };
 
     const onMouseLeave = () => {
+      if (loadingState !== 'loaded') return;
       if (canRef.current) {
         canRef.current.style.transform = 'translateY(0) rotateY(0deg) rotateX(0deg)';
       }
@@ -33,7 +43,89 @@ export default function HeroSection() {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseleave', onMouseLeave);
     };
-  }, []);
+  }, [loadingState]);
+
+  // Transition coordination GSAP Timeline
+  useEffect(() => {
+    if (loadingState === 'transitioning') {
+      const tl = gsap.timeline();
+
+      // 1. Zoom out the logo (scale down from huge size to normal) and fade it in
+      tl.fromTo(logoRef.current,
+        {
+          scale: 12,
+          opacity: 0,
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 1.8,
+          ease: 'power4.out',
+        }
+      );
+
+      // 2. Background image fade-in (matches loading screen reveal)
+      tl.fromTo(bgRef.current,
+        { opacity: 0 },
+        { opacity: 0.35, duration: 2.0, ease: 'power2.out' },
+        '-=1.8' // Start at same time as logo zoom-out
+      );
+
+      // 3. Mountains and mist fade in
+      tl.fromTo(mountainsRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 0.07, y: 0, duration: 1.5, ease: 'power2.out' },
+        '-=1.5'
+      );
+      tl.fromTo(mistRef.current,
+        { opacity: 0 },
+        { opacity: 0.35, duration: 1.5, ease: 'power2.out' },
+        '-=1.5'
+      );
+
+      // 4. Can container fades in and slides up
+      tl.fromTo(canRef.current,
+        {
+          opacity: 0,
+          y: 40,
+          scale: 0.95
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.5,
+          ease: 'power3.out',
+        },
+        '-=1.2' // Overlay beautifully during logo zoom tail
+      );
+
+      // 5. Scroll hint fades in at the very end
+      tl.fromTo(scrollHintRef.current,
+        {
+          opacity: 0,
+          y: 15
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.0,
+          ease: 'power2.out'
+        },
+        '-=0.8'
+      );
+    } else if (loadingState === 'loaded') {
+      // Safe fallback state in case transition finishes or direct loads
+      gsap.set([logoRef.current, bgRef.current, canRef.current, scrollHintRef.current], {
+        opacity: 1,
+        scale: 1,
+        y: 0
+      });
+      gsap.set(bgRef.current, { opacity: 0.35 });
+      gsap.set(mountainsRef.current, { opacity: 0.07, y: 0 });
+      gsap.set(mistRef.current, { opacity: 0.35 });
+    }
+  }, [loadingState]);
 
   return (
     <section
@@ -53,14 +145,18 @@ export default function HeroSection() {
       }}
     >
       {/* Hero background image — real Himalayan river */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: 'url(/images/hero-bg-v2.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 40%',
-        opacity: 0.35,
-      }} />
+      <div 
+        ref={bgRef}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'url(/images/hero-bg-v2.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%',
+          opacity: 0, // Handled by GSAP
+          willChange: 'opacity',
+        }} 
+      />
       {/* Soft white overlay for text readability */}
       <div style={{
         position: 'absolute',
@@ -70,26 +166,35 @@ export default function HeroSection() {
       }} />
 
       {/* Mist layers */}
-      <div ref={mistRef} style={{
-        position: 'absolute',
-        bottom: 0,
-        left: '-10%',
-        right: '-10%',
-        height: '35%',
-        background: 'linear-gradient(to top, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0.6) 50%, transparent 100%)',
-        animation: 'mistFlow 8s ease-in-out infinite',
-        pointerEvents: 'none',
-      }} />
+      <div 
+        ref={mistRef} 
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: '-10%',
+          right: '-10%',
+          height: '35%',
+          background: 'linear-gradient(to top, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0.6) 50%, transparent 100%)',
+          animation: loadingState === 'loaded' || loadingState === 'transitioning' ? 'mistFlow 8s ease-in-out infinite' : 'none',
+          pointerEvents: 'none',
+          opacity: 0, // Handled by GSAP
+          willChange: 'opacity',
+        }} 
+      />
 
       {/* Mountain SVG line art */}
-      <div style={{
-        position: 'absolute',
-        bottom: '15%',
-        left: 0,
-        right: 0,
-        opacity: 0.07,
-        pointerEvents: 'none',
-      }}>
+      <div 
+        ref={mountainsRef}
+        style={{
+          position: 'absolute',
+          bottom: '15%',
+          left: 0,
+          right: 0,
+          opacity: 0, // Handled by GSAP
+          pointerEvents: 'none',
+          willChange: 'opacity, transform',
+        }}
+      >
         <svg viewBox="0 0 1440 200" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%' }}>
           <path
             d="M0 200 L120 120 L200 150 L320 60 L420 110 L520 40 L620 90 L700 20 L800 80 L900 50 L1000 100 L1100 70 L1200 120 L1320 80 L1440 130 L1440 200 Z"
@@ -119,14 +224,18 @@ export default function HeroSection() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-        }}>
-        {/* Main Logo */}
-        <div style={{
-          animation: 'fadeInUp 1.2s ease forwards',
-          animationDelay: '0.4s',
-          opacity: 0,
-          marginBottom: '60px',
-        }}>
+        }}
+      >
+        {/* Main Logo Container */}
+        <div 
+          ref={logoRef}
+          style={{
+            opacity: 0, // Handled by GSAP
+            marginBottom: '60px',
+            transformOrigin: 'center center',
+            willChange: 'transform, opacity',
+          }}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src="/images/logo.png" 
@@ -138,18 +247,16 @@ export default function HeroSection() {
           />
         </div>
 
-        {/* Can */}
+        {/* Can Container */}
         <div
           ref={canRef}
           style={{
             position: 'relative',
             marginBottom: '60px',
             cursor: 'none',
-            transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-            animation: 'fadeIn 1.5s ease forwards, floatSlow 5s ease-in-out 1.5s infinite',
-            animationDelay: '1s, 0s',
-            opacity: 0,
+            opacity: 0, // Handled by GSAP
             transformStyle: 'preserve-3d',
+            willChange: 'transform, opacity',
           }}
         >
           {/* Soft halo glow */}
@@ -163,7 +270,7 @@ export default function HeroSection() {
             background: 'radial-gradient(circle, rgba(47,91,140,0.08) 0%, transparent 70%)',
             borderRadius: '50%',
             filter: 'blur(20px)',
-            animation: 'pulse 4s ease-in-out infinite',
+            animation: loadingState === 'loaded' || loadingState === 'transitioning' ? 'pulse 4s ease-in-out infinite' : 'none',
           }} />
 
           {/* Actual can image */}
@@ -177,6 +284,7 @@ export default function HeroSection() {
               filter: 'drop-shadow(0 30px 80px rgba(47, 91, 140, 0.2)) drop-shadow(0 8px 30px rgba(0,0,0,0.1))',
               position: 'relative',
               zIndex: 2,
+              animation: loadingState === 'loaded' || loadingState === 'transitioning' ? 'floatSlow 5s ease-in-out infinite' : 'none',
             }}
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = 'none';
@@ -190,15 +298,17 @@ export default function HeroSection() {
         </div>
 
         {/* Scroll hint */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          animation: 'fadeInUp 1s ease forwards',
-          animationDelay: '2s',
-          opacity: 0,
-        }}>
+        <div 
+          ref={scrollHintRef}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+            opacity: 0, // Handled by GSAP
+            willChange: 'opacity, transform',
+          }}
+        >
           <span style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: '10px',
@@ -206,7 +316,9 @@ export default function HeroSection() {
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
             color: 'var(--text-tertiary)',
-          }}>Scroll to explore</span>
+          }}>
+            Scroll to explore
+          </span>
           <div style={{
             width: '1px',
             height: '40px',
@@ -280,5 +392,3 @@ function HeroCSSCan() {
     </div>
   );
 }
-
-

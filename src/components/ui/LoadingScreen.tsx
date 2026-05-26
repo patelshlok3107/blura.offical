@@ -1,195 +1,197 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { gsap } from 'gsap';
 
-export default function LoadingScreen() {
-  const [loading, setLoading] = useState(true);
+interface LoadingScreenProps {
+  loadingState: 'loading' | 'transitioning' | 'loaded';
+  onTransitionStart: () => void;
+  onTransitionEnd: () => void;
+}
+
+export default function LoadingScreen({
+  loadingState,
+  onTransitionStart,
+  onTransitionEnd
+}: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
-  const [isFadingOut, setIsFadingOut] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLDivElement>(null);
+  const hasTriggeredTransition = useRef(false);
 
+  // Counter logic
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    const totalDuration = 4000; // 4 seconds total
-    const interval = 40;
+    let start = 0;
+    const end = 100;
+    const duration = 2200; // 2.2 seconds for loading progress
+    const range = end - start;
+    let startTime: number | null = null;
 
-    const fadeOutTimer = setTimeout(() => setIsFadingOut(true), totalDuration - 800); 
-    const finishTimer = setTimeout(() => {
-      setLoading(false);
-      document.body.style.overflow = '';
-    }, totalDuration);
+    const animateCounter = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsedTime = timestamp - startTime;
+      const currentProgress = Math.min(
+        start + (elapsedTime / duration) * range,
+        end
+      );
+      
+      setProgress(Math.floor(currentProgress));
 
-    const progressTimer = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + (100 / (totalDuration / interval));
-        return next > 100 ? 100 : next;
-      });
-    }, interval);
-
-    return () => {
-      clearTimeout(fadeOutTimer);
-      clearTimeout(finishTimer);
-      clearInterval(progressTimer);
-      document.body.style.overflow = '';
+      if (elapsedTime < duration) {
+        requestAnimationFrame(animateCounter);
+      } else {
+        setProgress(100);
+      }
     };
+
+    requestAnimationFrame(animateCounter);
   }, []);
 
-  if (!loading) return null;
+  // Handle progress completion
+  useEffect(() => {
+    if (progress === 100 && !hasTriggeredTransition.current) {
+      hasTriggeredTransition.current = true;
+      triggerTransition();
+    }
+  }, [progress]);
+
+  const triggerTransition = () => {
+    onTransitionStart();
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        onTransitionEnd();
+      }
+    });
+
+    // 1. Instantly fade out the counter so only the logo zooms
+    tl.to(counterRef.current, {
+      opacity: 0,
+      y: 20,
+      duration: 0.4,
+      ease: 'power2.out'
+    });
+
+    // 2. Zoom the logo in (scale up huge and fade out)
+    tl.to(logoRef.current, {
+      scale: 35,
+      opacity: 0,
+      duration: 1.8,
+      ease: 'power4.inOut'
+    }, '-=0.2');
+
+    // 3. Fade out the main container
+    tl.to(containerRef.current, {
+      opacity: 0,
+      duration: 1.5,
+      ease: 'power3.inOut'
+    }, '-=1.6');
+  };
+
+  // Helper to format the counter with leading zeros
+  const formatPercentage = (val: number) => {
+    if (val < 10) return `00${val}`;
+    if (val < 100) return `0${val}`;
+    return `${val}`;
+  };
 
   return (
     <div
+      ref={containerRef}
       style={{
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background: `
-          radial-gradient(ellipse 70% 60% at 50% 40%, rgba(47, 91, 140, 0.04) 0%, transparent 70%),
-          var(--bg-primary)
-        `,
-        opacity: isFadingOut ? 0 : 1,
-        transition: 'opacity 0.8s ease-in-out',
+        background: '#070f1a', // Premium deep obsidian dark blue background
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
         pointerEvents: 'none',
         overflow: 'hidden',
       }}
     >
-      {/* Background Image - matches landing page exactly */}
+      {/* Premium subtle ambient glow behind the logo */}
       <div
         style={{
           position: 'absolute',
-          inset: 0,
-          backgroundImage: 'url(/images/hero-bg-v2.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 40%',
-          opacity: 0.35,
-          animation: 'kenBurnsBg 8s ease-out forwards',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '50vw',
+          height: '50vw',
+          background: 'radial-gradient(circle, rgba(47, 91, 140, 0.15) 0%, transparent 70%)',
+          filter: 'blur(40px)',
+          pointerEvents: 'none',
+          zIndex: 1,
         }}
       />
 
-      {/* Light Overlay - matches landing page exactly */}
+      {/* Main Logo Container */}
       <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(180deg, rgba(248,249,250,0.5) 0%, rgba(248,249,250,0.3) 40%, rgba(248,249,250,0.7) 100%)',
-        }}
-      />
-
-      {/* Mist layers */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: '-10%',
-        right: '-10%',
-        height: '35%',
-        background: 'linear-gradient(to top, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0.6) 50%, transparent 100%)',
-      }} />
-
-      {/* Main Content Wrapper - matches HeroSection padding */}
-      <div
+        ref={logoRef}
         style={{
           position: 'relative',
           zIndex: 10,
-          textAlign: 'center',
-          padding: 'clamp(80px, 12vw, 120px) 20px clamp(60px, 8vw, 80px)',
-          maxWidth: '1200px',
-          width: '100%',
+          transformOrigin: 'center center',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
+          width: 'clamp(240px, 40vw, 500px)',
+          height: 'auto',
+          willChange: 'transform, opacity',
         }}
       >
-        {/* Animated Brand Logo */}
-        <div style={{
-          marginBottom: '20px',
-          animation: 'fadeInUp 1s ease forwards',
-        }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img 
-            src="/images/logo.png" 
-            alt="blüra CANNED HIMALAYAN WATER" 
-            style={{ 
-              width: 'clamp(240px, 40vw, 500px)', 
-              height: 'auto'
-            }} 
-          />
-        </div>
-
-        {/* Floating Can */}
-        <div
-          style={{
-            position: 'relative',
-            width: 'clamp(180px, 22vw, 300px)',
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img 
+          src="/images/logo.png" 
+          alt="blüra Logo" 
+          style={{ 
+            width: '100%', 
             height: 'auto',
-            animation: 'fadeInUp 1.2s ease forwards, floatSlow 4s ease-in-out infinite',
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/can-white.png"
-            alt="blüra Can"
-            style={{
-              width: '100%',
-              height: 'auto',
-              filter: 'drop-shadow(0 30px 80px rgba(47, 91, 140, 0.2))',
-            }}
-          />
-        </div>
+            filter: 'brightness(0) invert(0.95) drop-shadow(0 0 20px rgba(255, 255, 255, 0.05))', // Renders original logo in stunning soft silver-white
+          }} 
+        />
       </div>
 
-      {/* Loading Bar at Bottom */}
+      {/* Modern minimalist percentage indicator */}
       <div
+        ref={counterRef}
         style={{
           position: 'absolute',
           bottom: '10%',
-          left: '50%',
-          transform: 'translateX(-50%)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '12px',
+          gap: '8px',
           zIndex: 10,
-          animation: 'fadeIn 1s ease forwards',
-          animationDelay: '0.5s',
-          opacity: 0,
+          willChange: 'opacity, transform',
         }}
       >
-        <span style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: '10px',
-          fontWeight: '500',
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          color: 'var(--text-tertiary)',
-        }}>
-          {progress < 100 ? 'Preparing Experience' : 'Ready'}
+        <span
+          style={{
+            fontFamily: "'Courier New', Courier, monospace",
+            fontSize: 'clamp(14px, 2vw, 18px)',
+            fontWeight: '300',
+            letterSpacing: '0.15em',
+            color: 'rgba(255, 255, 255, 0.7)',
+          }}
+        >
+          {formatPercentage(progress)}%
         </span>
-        
-        {/* Progress Bar */}
-        <div style={{
-          width: 'clamp(150px, 20vw, 250px)',
-          height: '2px',
-          background: 'rgba(47, 91, 140, 0.1)',
-          borderRadius: '2px',
-          overflow: 'hidden',
-          position: 'relative',
-        }}>
-          <div style={{
-            position: 'absolute',
-            top: 0, left: 0, bottom: 0,
-            width: `${progress}%`,
-            background: 'var(--accent-blue)',
-            transition: 'width 0.1s linear',
-          }} />
-        </div>
+        <span
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: '9px',
+            fontWeight: '400',
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            color: 'rgba(255, 255, 255, 0.35)',
+          }}
+        >
+          PREPARING PURITY
+        </span>
       </div>
-
-      <style>{`
-        @keyframes kenBurnsBg {
-          0% { transform: scale(1) translate(0, 0); }
-          100% { transform: scale(1.1) translate(-1%, -1%); }
-        }
-      `}</style>
     </div>
   );
 }
