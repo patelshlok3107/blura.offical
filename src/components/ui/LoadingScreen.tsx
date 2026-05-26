@@ -103,12 +103,11 @@ export default function LoadingScreen() {
         }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/images/logo.jpeg" 
+            src="/images/logo.png" 
             alt="blüra CANNED HIMALAYAN WATER" 
             style={{ 
               width: 'clamp(240px, 40vw, 500px)', 
-              height: 'auto', 
-              mixBlendMode: 'multiply' 
+              height: 'auto'
             }} 
           />
         </div>
