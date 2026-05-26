@@ -69,7 +69,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img src="/images/logo.png" alt="blüra" style={{ height: isMobile ? '36px' : '44px', width: 'auto' }} />
+              <img src="/images/logo.png" alt="blüra" style={{ height: isMobile ? '56px' : '80px', width: 'auto' }} />
             </div>
           </Link>
 
@@ -184,7 +184,7 @@ export default function Navbar() {
 
           {/* Logo inside menu */}
           <div style={{ marginBottom: '32px' }}>
-            <img src="/images/logo.png" alt="blüra" style={{ height: '48px', width: 'auto' }} />
+            <img src="/images/logo.png" alt="blüra" style={{ height: '80px', width: 'auto' }} />
           </div>
 
           {/* Nav links */}
