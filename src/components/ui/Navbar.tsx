@@ -71,12 +71,10 @@ export default function Navbar() {
             <div style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              justifyContent: 'center',
-              height: isMobile ? '40px' : '50px', 
-              width: isMobile ? '120px' : '160px',
+              height: '40px', 
             }}>
               <img src="/images/logo.png" alt="blüra" style={{ 
-                width: isMobile ? '300px' : '400px', 
+                width: isMobile ? '120px' : '150px', 
                 height: 'auto',
                 maxWidth: 'none',
               }} />
@@ -194,13 +192,13 @@ export default function Navbar() {
 
           {/* Logo inside menu */}
           <div style={{ 
-            marginBottom: '32px',
+            marginBottom: '40px',
             height: '60px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <img src="/images/logo.png" alt="blüra" style={{ width: '450px', height: 'auto', maxWidth: 'none' }} />
+            <img src="/images/logo.png" alt="blüra" style={{ width: '200px', height: 'auto', maxWidth: 'none' }} />
           </div>
 
           {/* Nav links */}
