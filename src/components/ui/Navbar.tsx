@@ -69,7 +69,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img src="/images/logo.png" alt="blüra" style={{ height: isMobile ? '56px' : '80px', width: 'auto' }} />
+              <img src="/images/logo.png" alt="blüra" style={{ height: isMobile ? '72px' : '120px', width: 'auto' }} />
             </div>
           </Link>
 

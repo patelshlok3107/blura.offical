@@ -85,15 +85,18 @@ export default function LoadingScreen() {
         background: 'linear-gradient(to top, rgba(248,249,250,0.95) 0%, rgba(248,249,250,0.6) 50%, transparent 100%)',
       }} />
 
-      {/* Main Content Wrapper */}
+      {/* Main Content Wrapper - matches HeroSection padding */}
       <div
         style={{
           position: 'relative',
           zIndex: 10,
+          textAlign: 'center',
+          padding: 'clamp(80px, 12vw, 120px) 20px clamp(60px, 8vw, 80px)',
+          maxWidth: '1200px',
+          width: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: '-5vh',
         }}
       >
         {/* Animated Brand Logo */}
