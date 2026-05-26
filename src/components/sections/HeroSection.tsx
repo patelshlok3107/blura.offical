@@ -120,55 +120,23 @@ export default function HeroSection() {
           flexDirection: 'column',
           alignItems: 'center',
         }}>
-        {/* Top label */}
-        <div
-          ref={textRef}
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: '11px',
-            fontWeight: '500',
-            letterSpacing: '0.25em',
-            textTransform: 'uppercase',
-            color: 'var(--accent-blue)',
-            marginBottom: '32px',
-            animation: 'fadeInUp 1s ease forwards',
-            animationDelay: '0.2s',
-            opacity: 0,
-          }}
-        >
-          From Himalayan Foothills
-        </div>
-
-        {/* Brand name */}
+        {/* Main Logo */}
         <div style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(72px, 12vw, 160px)',
-          fontWeight: '300',
-          letterSpacing: '-0.04em',
-          lineHeight: 0.9,
-          color: 'var(--dark-blue)',
           animation: 'fadeInUp 1.2s ease forwards',
           animationDelay: '0.4s',
           opacity: 0,
-          marginBottom: '8px',
-        }}>
-          bl<span style={{ color: 'var(--accent-blue)' }}>ü</span>ra
-        </div>
-
-        {/* Tagline */}
-        <div style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(16px, 3vw, 24px)',
-          fontWeight: '300',
-          fontStyle: 'italic',
-          letterSpacing: '0.06em',
-          color: 'var(--text-secondary)',
-          animation: 'fadeInUp 1.2s ease forwards',
-          animationDelay: '0.7s',
-          opacity: 0,
           marginBottom: '60px',
         }}>
-          Elevate Yourself
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/images/logo.png" 
+            alt="blüra CANNED HIMALAYAN WATER" 
+            style={{ 
+              width: 'clamp(240px, 40vw, 500px)', 
+              height: 'auto', 
+              mixBlendMode: 'multiply' 
+            }} 
+          />
         </div>
 
         {/* Can */}

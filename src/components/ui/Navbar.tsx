@@ -68,27 +68,8 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-              <span style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: isMobile ? '24px' : '28px',
-                fontWeight: '400',
-                letterSpacing: '-0.02em',
-                color: 'var(--dark-blue)',
-              }}>
-                blüra
-              </span>
-              <span style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: '7px',
-                fontWeight: '500',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'var(--text-secondary)',
-                marginTop: '1px',
-              }}>
-                From Himalayan Foothills
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img src="/images/logo.png" alt="blüra" style={{ height: isMobile ? '36px' : '44px', width: 'auto', mixBlendMode: 'multiply' }} />
             </div>
           </Link>
 
@@ -202,12 +183,9 @@ export default function Navbar() {
           </button>
 
           {/* Logo inside menu */}
-          <div style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: '32px', fontWeight: '300',
-            color: 'var(--dark-blue)', marginBottom: '32px',
-            letterSpacing: '-0.02em',
-          }}>blüra</div>
+          <div style={{ marginBottom: '32px' }}>
+            <img src="/images/logo.png" alt="blüra" style={{ height: '48px', width: 'auto', mixBlendMode: 'multiply' }} />
+          </div>
 
           {/* Nav links */}
           {navLinks.map((link, i) => (

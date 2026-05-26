@@ -96,18 +96,21 @@ export default function LoadingScreen() {
           marginTop: '-5vh',
         }}
       >
-        {/* Animated Brand Name */}
+        {/* Animated Brand Logo */}
         <div style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 'clamp(72px, 12vw, 160px)',
-          fontWeight: '300',
-          letterSpacing: '-0.04em',
-          lineHeight: 0.9,
-          color: 'var(--dark-blue)',
           marginBottom: '20px',
           animation: 'fadeInUp 1s ease forwards',
         }}>
-          bl<span style={{ color: 'var(--accent-blue)' }}>ü</span>ra
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/images/logo.png" 
+            alt="blüra CANNED HIMALAYAN WATER" 
+            style={{ 
+              width: 'clamp(240px, 40vw, 500px)', 
+              height: 'auto', 
+              mixBlendMode: 'multiply' 
+            }} 
+          />
         </div>
 
         {/* Floating Can */}
