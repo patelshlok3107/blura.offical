@@ -17,7 +17,7 @@ export async function GET() {
     
     const csvRows = inquiries.map(inq => {
       // Escape quotes and wrap fields in quotes to handle commas within text
-      const cleanField = (val: any) => {
+      const cleanField = (val: unknown) => {
         if (!val) return '""';
         return `"${String(val).replace(/"/g, '""')}"`;
       };

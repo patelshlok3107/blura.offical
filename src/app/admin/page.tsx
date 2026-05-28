@@ -18,11 +18,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    fetchInquiries();
-  }, [filter]);
-
-  const fetchInquiries = async () => {
+  async function fetchInquiries() {
     setLoading(true);
     try {
       const res = await fetch(`/api/inquiries?status=${filter}`);
@@ -34,7 +30,13 @@ export default function AdminDashboard() {
       console.error('Failed to fetch inquiries:', error);
     }
     setLoading(false);
-  };
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchInquiries();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
 
   const updateStatus = async (id: number, newStatus: string) => {
     try {
@@ -188,3 +190,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

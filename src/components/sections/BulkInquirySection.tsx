@@ -30,7 +30,7 @@ export default function BulkInquirySection() {
     let text = 'Hi, I’m interested in ordering blüra mineral water in bulk. Please share details.';
     
     const keywords = (formData.name).toLowerCase();
-    let tags = [];
+    const tags: string[] = [];
     if (keywords.includes('hotel')) tags.push('hotel');
     if (keywords.includes('event') || keywords.includes('wedding')) tags.push('event');
     if (keywords.includes('office') || keywords.includes('corporate')) tags.push('office');

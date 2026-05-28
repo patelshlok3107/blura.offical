@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -33,7 +33,11 @@ export default function Navbar() {
 
   // Close menu on route change
   useEffect(() => {
-    setMenuOpen(false);
+    const timer = setTimeout(() => {
+      if (menuOpen) setMenuOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Prevent body scroll when menu is open

@@ -1,14 +1,13 @@
 'use client';
 
-export default function MarqueeSection() {
+const TextBlock = () => {
   const words = [
     "blüra life", "✧",
     "blüra life", "✧",
     "blüra life", "✧",
     "blüra life", "✧"
   ];
-
-  const TextBlock = () => (
+  return (
     <div style={{ display: 'flex', alignItems: 'center', paddingRight: '40px' }}>
       {words.map((word, idx) => (
         <span key={idx} style={{
@@ -25,6 +24,9 @@ export default function MarqueeSection() {
       ))}
     </div>
   );
+};
+
+export default function MarqueeSection() {
 
   return (
     <section style={{
