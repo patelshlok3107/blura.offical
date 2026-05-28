@@ -276,7 +276,7 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
           {/* Actual can image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/can-white.png"
+            src="/images/can-droplets-v2.png"
             alt="blüra Premium Mineral Water"
             style={{
               width: 'clamp(180px, 22vw, 300px)',
