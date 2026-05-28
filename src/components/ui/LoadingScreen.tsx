@@ -16,7 +16,7 @@ export default function LoadingScreen({
 }: LoadingScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
-  const rippleRef = useRef<HTMLDivElement>(null);
+  const canRef = useRef<HTMLDivElement>(null);
   const mountainRef = useRef<HTMLDivElement>(null);
   const logoContainerRef = useRef<HTMLDivElement>(null);
   const sweepRef = useRef<HTMLDivElement>(null);
@@ -35,15 +35,14 @@ export default function LoadingScreen({
     hasStarted.current = true;
 
     const drop = dropRef.current;
-    const rippleContainer = rippleRef.current;
+    const can = canRef.current;
     const mountain = mountainRef.current;
     const logo = logoContainerRef.current;
     const sweep = sweepRef.current;
     const container = containerRef.current;
 
-    if (!drop || !rippleContainer || !mountain || !logo || !sweep || !container) return;
+    if (!drop || !can || !mountain || !logo || !sweep || !container) return;
 
-    const rippleRings = rippleContainer.querySelectorAll('.ripple-ring');
     const tl = gsap.timeline();
 
     // ═══════════════════════════════════════════════
@@ -69,33 +68,65 @@ export default function LoadingScreen({
     });
 
     // ═══════════════════════════════════════════════
-    // STAGE 3 — RIPPLE EXPANDS  (1.3 → 2.8s)
-    // Droplet vanishes on "impact"; concentric ovals expand
+    // STAGE 3 — CAN IMPACT  (1.3 → ~2.8s)
+    // Droplet vanishes on "impact"; the blüra can appears
+    // with a subtle splash glow, then the can zooms in
+    // focusing on the logo area, and zooms back out
     // ═══════════════════════════════════════════════
+    // Droplet vanishes
     tl.to(drop, { opacity: 0, scale: 2.5, duration: 0.12, ease: 'power2.out' });
-    tl.set(rippleContainer, { opacity: 1 });
+
+    // Can appears with a subtle scale-up
     tl.fromTo(
-      rippleRings,
-      { scaleX: 0, scaleY: 0, opacity: 0.7 },
-      {
-        scaleX: 1,
-        scaleY: 1,
-        opacity: 0,
-        duration: 1.4,
-        ease: 'power1.out',
-        stagger: 0.22,
-      },
+      can,
+      { opacity: 0, scale: 0.6, y: 30 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'back.out(1.4)' },
     );
 
+    // Brief splash glow behind the can
+    tl.fromTo(
+      can.querySelector('.can-glow') as HTMLElement,
+      { opacity: 0, scale: 0.5 },
+      { opacity: 0.6, scale: 1.3, duration: 0.4, ease: 'power2.out' },
+      '-=0.6',
+    );
+    tl.to(
+      can.querySelector('.can-glow') as HTMLElement,
+      { opacity: 0, scale: 1.6, duration: 0.6, ease: 'power2.in' },
+    );
+
+    // Zoom INTO the logo area on the can (scale up + shift upward to center on the logo)
+    tl.to(can, {
+      scale: 2.2,
+      y: 60,
+      duration: 1.0,
+      ease: 'power2.inOut',
+    }, '-=0.3');
+
+    // Hold at zoom briefly, then zoom back out
+    tl.to(can, {
+      scale: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.inOut',
+    }, '+=0.3');
+
     // ═══════════════════════════════════════════════
-    // STAGE 4 — MIST RISES  (overlaps with stage 3)
+    // STAGE 4 — MIST RISES  (overlaps with zoom-out)
     // Himalayan mountains emerge through soft mist
     // ═══════════════════════════════════════════════
     tl.fromTo(
       mountain,
       { opacity: 0, y: 50 },
       { opacity: 1, y: 0, duration: 1.4, ease: 'power2.out' },
-      '-=1.3',
+      '-=0.8',
+    );
+
+    // Fade out the can as the mountains come in
+    tl.to(
+      can,
+      { opacity: 0, scale: 0.8, duration: 0.7, ease: 'power2.in' },
+      '-=1.2',
     );
 
     // ═══════════════════════════════════════════════
@@ -295,9 +326,9 @@ export default function LoadingScreen({
         </svg>
       </div>
 
-      {/* ── Ripple Container ── */}
+      {/* ── Can Container (replaces ripple) ── */}
       <div
-        ref={rippleRef}
+        ref={canRef}
         style={{
           position: 'absolute',
           top: '50%',
@@ -305,36 +336,38 @@ export default function LoadingScreen({
           transform: 'translate(-50%, -50%)',
           opacity: 0,
           zIndex: 15,
+          willChange: 'transform, opacity',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        {[0, 1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="ripple-ring"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: `${120 + i * 80}px`,
-              height: `${40 + i * 28}px`,
-              marginLeft: `${-(120 + i * 80) / 2}px`,
-              marginTop: `${-(40 + i * 28) / 2}px`,
-              borderRadius: '50%',
-              transformOrigin: 'center center',
-              // Realistic refractive water ripple effect
-              boxShadow: `
-                inset 0 2px 4px rgba(255, 255, 255, ${0.6 - i * 0.1}), 
-                inset 0 -2px 6px rgba(47, 91, 140, ${0.2 - i * 0.05}),
-                0 4px 8px rgba(47, 91, 140, ${0.15 - i * 0.03}),
-                0 -2px 4px rgba(255, 255, 255, ${0.5 - i * 0.1})
-              `,
-              border: `${2 - i * 0.3}px solid rgba(255, 255, 255, ${0.4 - i * 0.1})`,
-              backdropFilter: `blur(${3 - i * 0.5}px) contrast(1.1)`,
-              WebkitBackdropFilter: `blur(${3 - i * 0.5}px) contrast(1.1)`,
-              background: `rgba(200, 220, 240, ${0.05 - i * 0.01})`
-            }}
-          />
-        ))}
+        {/* Radial splash glow behind the can */}
+        <div
+          className="can-glow"
+          style={{
+            position: 'absolute',
+            width: '500px',
+            height: '500px',
+            borderRadius: '50%',
+            background:
+              'radial-gradient(circle, rgba(180,210,240,0.5) 0%, rgba(200,225,250,0.2) 40%, transparent 70%)',
+            opacity: 0,
+            pointerEvents: 'none',
+          }}
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/can-droplets-v2.png"
+          alt="blüra can"
+          loading="eager"
+          style={{
+            height: 'clamp(280px, 50vh, 520px)',
+            width: 'auto',
+            display: 'block',
+            filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))',
+          }}
+        />
       </div>
 
       {/* ── Logo Container ── */}
