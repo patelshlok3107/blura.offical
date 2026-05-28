@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
 interface LoadingScreenProps {
@@ -15,14 +15,13 @@ export default function LoadingScreen({
   onTransitionEnd,
 }: LoadingScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const dropRef = useRef<HTMLDivElement>(null);
-  const rippleRef = useRef<HTMLDivElement>(null);
-  const mountainRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const logoContainerRef = useRef<HTMLDivElement>(null);
   const sweepRef = useRef<HTMLDivElement>(null);
-  const hasStarted = useRef(false);
+  const [videoEnded, setVideoEnded] = useState(false);
+  const transitionStarted = useRef(false);
 
-  // Store callbacks in refs to avoid stale closure in the GSAP timeline
+  // Store callbacks in refs
   const cbStart = useRef(onTransitionStart);
   const cbEnd = useRef(onTransitionEnd);
   useEffect(() => {
@@ -30,139 +29,94 @@ export default function LoadingScreen({
     cbEnd.current = onTransitionEnd;
   });
 
+  // Handle video playback events
   useEffect(() => {
-    if (hasStarted.current) return;
-    hasStarted.current = true;
+    const video = videoRef.current;
+    if (!video) return;
 
-    const drop = dropRef.current;
-    const rippleContainer = rippleRef.current;
-    const mountain = mountainRef.current;
-    const logo = logoContainerRef.current;
-    const sweep = sweepRef.current;
-    const container = containerRef.current;
+    // We can trigger the transition when the video ends, or at a specific time.
+    // The Awwwards droplet video is about 4-5 seconds long.
+    const handleTimeUpdate = () => {
+      // Start the logo reveal slightly before the video ends (e.g., at 3 seconds)
+      if (video.currentTime > 2.5 && !videoEnded) {
+        setVideoEnded(true);
+      }
+    };
 
-    if (!drop || !rippleContainer || !mountain || !logo || !sweep || !container) return;
+    const handleEnded = () => {
+      if (!videoEnded) setVideoEnded(true);
+    };
 
-    const rippleRings = rippleContainer.querySelectorAll('.ripple-ring');
-    const tl = gsap.timeline();
-
-    // ═══════════════════════════════════════════════
-    // STAGE 1 — DROP APPEARS  (0 → 0.7s)
-    // A single water droplet materialises at center-top
-    // ═══════════════════════════════════════════════
-    tl.fromTo(
-      drop,
-      { opacity: 0, scale: 0.2, y: -140 },
-      { opacity: 1, scale: 1, y: -140, duration: 0.7, ease: 'power2.out' },
-    );
-
-    // ═══════════════════════════════════════════════
-    // STAGE 2 — DROP FALLS  (0.7 → 1.3s)
-    // Droplet accelerates downward with a slight stretch
-    // ═══════════════════════════════════════════════
-    tl.to(drop, {
-      y: 0,
-      scaleY: 1.25,
-      scaleX: 0.8,
-      duration: 0.6,
-      ease: 'power2.in',
-    });
-
-    // ═══════════════════════════════════════════════
-    // STAGE 3 — RIPPLE EXPANDS  (1.3 → 2.8s)
-    // Droplet vanishes on "impact"; concentric ovals expand
-    // ═══════════════════════════════════════════════
-    tl.to(drop, { opacity: 0, scale: 2.5, duration: 0.12, ease: 'power2.out' });
-    tl.set(rippleContainer, { opacity: 1 });
-    tl.fromTo(
-      rippleRings,
-      { scaleX: 0, scaleY: 0, opacity: 0.7 },
-      {
-        scaleX: 1,
-        scaleY: 1,
-        opacity: 0,
-        duration: 1.4,
-        ease: 'power1.out',
-        stagger: 0.22,
-      },
-    );
-
-    // ═══════════════════════════════════════════════
-    // STAGE 4 — MIST RISES  (overlaps with stage 3)
-    // Himalayan mountains emerge through soft mist
-    // ═══════════════════════════════════════════════
-    tl.fromTo(
-      mountain,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1.4, ease: 'power2.out' },
-      '-=1.3',
-    );
-
-    // ═══════════════════════════════════════════════
-    // STAGE 5 — LOGO REVEAL  (overlaps with stage 4)
-    // blüra logo fades in and scales to full size
-    // ═══════════════════════════════════════════════
-    tl.fromTo(
-      logo,
-      { opacity: 0, scale: 0.82, y: 12 },
-      { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'power3.out' },
-      '-=0.6',
-    );
-
-    // ═══════════════════════════════════════════════
-    // STAGE 6 — LIGHT SWEEP
-    // Bright highlight slides across the logo
-    // ═══════════════════════════════════════════════
-    tl.fromTo(
-      sweep,
-      { x: '-100%' },
-      { x: '250%', duration: 0.9, ease: 'power2.inOut' },
-      '-=0.2',
-    );
-
-    // ═══════════════════════════════════════════════
-    // STAGE 7 — FADE TO LANDING
-    // Logo scales up hugely, everything fades out
-    // ═══════════════════════════════════════════════
-    tl.add(() => {
-      cbStart.current();
-    }, '+=0.35');
-
-    tl.to(logo, {
-      scale: 10,
-      opacity: 0,
-      duration: 1.4,
-      ease: 'power4.inOut',
-    });
-
-    tl.to(
-      mountain,
-      { opacity: 0, duration: 0.9, ease: 'power2.in' },
-      '-=1.4',
-    );
-
-    // ═══════════════════════════════════════════════
-    // STAGE 8 — SMOOTH TRANSITION (FINAL)
-    // Container disappears, hero section takes over
-    // ═══════════════════════════════════════════════
-    tl.to(
-      container,
-      {
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.inOut',
-        onComplete: () => {
-          cbEnd.current();
-        },
-      },
-      '-=0.7',
-    );
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener('ended', handleEnded);
 
     return () => {
-      tl.kill();
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener('ended', handleEnded);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [videoEnded]);
+
+  // Handle the transition GSAP timeline once the video is "ended" (or reached the threshold)
+  useEffect(() => {
+    if (videoEnded && !transitionStarted.current) {
+      transitionStarted.current = true;
+      
+      const logo = logoContainerRef.current;
+      const sweep = sweepRef.current;
+      const container = containerRef.current;
+      const video = videoRef.current;
+      
+      const tl = gsap.timeline();
+
+      // 1. Fade in the logo over the video
+      tl.fromTo(
+        logo,
+        { opacity: 0, scale: 0.85, y: 15 },
+        { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'power3.out' }
+      );
+
+      // 2. Light sweep across the logo
+      tl.fromTo(
+        sweep,
+        { x: '-100%' },
+        { x: '250%', duration: 0.9, ease: 'power2.inOut' },
+        '-=0.4'
+      );
+
+      // 3. Zoom the logo in hugely to transition to landing page
+      tl.add(() => {
+        cbStart.current();
+      }, '+=0.3');
+
+      tl.to(logo, {
+        scale: 10,
+        opacity: 0,
+        duration: 1.4,
+        ease: 'power4.inOut',
+      });
+      
+      // Fade out the video at the same time
+      tl.to(video, {
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power2.inOut',
+      }, '-=1.4');
+
+      // 4. Fade out the whole container and finish
+      tl.to(
+        container,
+        {
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            cbEnd.current();
+          },
+        },
+        '-=0.6'
+      );
+    }
+  }, [videoEnded]);
 
   return (
     <div
@@ -171,8 +125,7 @@ export default function LoadingScreen({
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background:
-          'linear-gradient(180deg, #dce5ef 0%, #e8eef5 25%, #f2f5f9 55%, #ffffff 100%)',
+        background: '#070f1a', // Dark background for the video
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -180,152 +133,32 @@ export default function LoadingScreen({
         overflow: 'hidden',
       }}
     >
-      {/* ── Mountain Background Layer ── */}
-      <div
-        ref={mountainRef}
+      {/* ── Real Droplet Video Background ── */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        src="/videos/loading-drop.mp4"
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0,
-          willChange: 'opacity, transform',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: 10,
         }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/mountains.png"
-          alt=""
-          loading="eager"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center 35%',
-          }}
-        />
-        {/* Top mist overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '35%',
-            background:
-              'linear-gradient(to bottom, rgba(220,229,239,0.95) 0%, rgba(232,238,245,0.6) 50%, transparent 100%)',
-            pointerEvents: 'none',
-          }}
-        />
-        {/* Bottom mist overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '45%',
-            background:
-              'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.85) 40%, transparent 100%)',
-            pointerEvents: 'none',
-          }}
-        />
-        {/* Side mist vignette */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 40%, rgba(255,255,255,0.7) 100%)',
-            pointerEvents: 'none',
-          }}
-        />
-      </div>
-
-      {/* ── Water Droplet ── */}
-      <div
-        ref={dropRef}
+      />
+      
+      {/* ── Optional Dark Overlay to make logo pop ── */}
+      <div 
         style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
-          marginLeft: '-15px',
-          marginTop: '-25px',
-          width: '30px',
-          height: '50px',
-          opacity: 0,
-          zIndex: 20,
-          willChange: 'transform, opacity',
-        }}
-      >
-        <svg width="30" height="50" viewBox="0 0 30 50" style={{ filter: 'drop-shadow(0px 10px 10px rgba(47,91,140,0.3))' }}>
-          <defs>
-            <radialGradient id="water-grad" cx="30%" cy="30%" r="70%">
-              <stop offset="0%" stopColor="rgba(255, 255, 255, 0.95)" />
-              <stop offset="25%" stopColor="rgba(255, 255, 255, 0.5)" />
-              <stop offset="60%" stopColor="rgba(180, 210, 240, 0.4)" />
-              <stop offset="90%" stopColor="rgba(47, 91, 140, 0.6)" />
-              <stop offset="100%" stopColor="rgba(20, 50, 90, 0.8)" />
-            </radialGradient>
-            <linearGradient id="highlight" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.9)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-            </linearGradient>
-            <filter id="liquid-glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="1.5" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
-          {/* Main Droplet Body (Teardrop shape) */}
-          <path 
-            d="M 15,2 C 15,2 28,25 28,35 C 28,43 22,48 15,48 C 8,48 2,43 2,35 C 2,25 15,2 15,2 Z" 
-            fill="url(#water-grad)" 
-            filter="url(#liquid-glow)"
-          />
-          {/* Inner Caustic Highlight */}
-          <path 
-            d="M 15,46 C 20,46 25,42 25,36 C 25,38 20,42 15,42 C 10,42 5,38 5,36 C 5,42 10,46 15,46 Z" 
-            fill="rgba(255,255,255,0.6)" 
-            filter="blur(1px)"
-          />
-          {/* Main Specular Highlight (Left side curve) */}
-          <path 
-            d="M 6,32 C 6,26 10,18 14,12 C 10,18 8,26 9,32 C 9,34 7,34 6,32 Z" 
-            fill="url(#highlight)" 
-            filter="blur(0.5px)"
-          />
-        </svg>
-      </div>
-
-      {/* ── Ripple Container ── */}
-      <div
-        ref={rippleRef}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          opacity: 0,
+          inset: 0,
+          background: 'rgba(0, 0, 0, 0.15)',
           zIndex: 15,
         }}
-      >
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="ripple-ring"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: `${100 + i * 70}px`,
-              height: `${36 + i * 26}px`,
-              marginLeft: `${-(100 + i * 70) / 2}px`,
-              marginTop: `${-(36 + i * 26) / 2}px`,
-              border: `${1.8 - i * 0.25}px solid rgba(47, 91, 140, ${0.4 - i * 0.06})`,
-              borderRadius: '50%',
-              transformOrigin: 'center center',
-            }}
-          />
-        ))}
-      </div>
+      />
 
       {/* ── Logo Container ── */}
       <div
@@ -343,12 +176,13 @@ export default function LoadingScreen({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/logo.png"
-          alt="blüra"
+          alt="blüra Elevate Yourself"
           loading="eager"
           style={{
             width: 'clamp(220px, 32vw, 420px)',
             height: 'auto',
             display: 'block',
+            filter: 'drop-shadow(0px 10px 20px rgba(0,0,0,0.3))' // Shadow for visibility over video
           }}
         />
         {/* Light sweep overlay */}
