@@ -238,7 +238,7 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/images/logo.png" 
+            src="/images/logo-v2.png" 
             alt="blüra Elevate yourself" 
             style={{ 
               width: 'clamp(240px, 40vw, 500px)', 
