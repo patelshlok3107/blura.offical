@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
@@ -100,7 +100,7 @@ export default function LoadingScreen({
 
     // ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
     // STAGE 5 ΓÇö LOGO REVEAL  (overlaps with stage 4)
-    // bl├╝ra logo fades in and scales to full size
+    // blüra logo fades in and scales to full size
     // ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
     tl.fromTo(
       logo,
@@ -353,7 +353,7 @@ export default function LoadingScreen({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/logo-v2.png"
-          alt="bl├╝ra"
+          alt="blüra"
           loading="eager"
           style={{
             width: 'clamp(220px, 32vw, 420px)',
