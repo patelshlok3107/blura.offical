@@ -22,13 +22,17 @@ export default function Footer() {
         >
           {/* Brand */}
           <div>
-            <div style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: '36px',
-              fontWeight: '300',
-              color: 'var(--dark-blue)',
-              marginBottom: '12px',
-            }}>blüra</div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/logo-new.png"
+              alt="blüra"
+              style={{
+                width: '160px',
+                height: 'auto',
+                display: 'block',
+                marginBottom: '16px',
+              }}
+            />
             <p style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: '12px',

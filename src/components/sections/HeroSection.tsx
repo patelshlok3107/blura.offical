@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
@@ -50,54 +50,54 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
     if (loadingState === 'transitioning') {
       const tl = gsap.timeline();
 
-      // 1. Zoom out the logo (scale down from huge size to normal) and fade it in
+      // 1. Logo fades + slides up as curtain lifts
       tl.fromTo(logoRef.current,
         {
-          scale: 12,
           opacity: 0,
+          y: 18,
         },
         {
-          scale: 1,
           opacity: 1,
-          duration: 1.8,
-          ease: 'power4.out',
+          y: 0,
+          duration: 1.0,
+          ease: 'power3.out',
         }
       );
 
-      // 2. Background image fade-in (matches loading screen reveal)
+      // 2. Background image fade-in (matches curtain lift timing)
       tl.fromTo(bgRef.current,
         { opacity: 0 },
-        { opacity: 0.35, duration: 2.0, ease: 'power2.out' },
-        '-=1.8' // Start at same time as logo zoom-out
+        { opacity: 0.35, duration: 1.6, ease: 'power2.out' },
+        '-=1.0' // Overlap with logo reveal
       );
 
       // 3. Mountains and mist fade in
       tl.fromTo(mountainsRef.current,
         { opacity: 0, y: 20 },
-        { opacity: 0.07, y: 0, duration: 1.5, ease: 'power2.out' },
-        '-=1.5'
+        { opacity: 0.07, y: 0, duration: 1.2, ease: 'power2.out' },
+        '-=1.0'
       );
       tl.fromTo(mistRef.current,
         { opacity: 0 },
-        { opacity: 0.35, duration: 1.5, ease: 'power2.out' },
-        '-=1.5'
+        { opacity: 0.35, duration: 1.2, ease: 'power2.out' },
+        '-=1.2'
       );
 
       // 4. Can container fades in and slides up
       tl.fromTo(canRef.current,
         {
           opacity: 0,
-          y: 40,
-          scale: 0.95
+          y: 30,
+          scale: 0.96
         },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 1.5,
+          duration: 1.2,
           ease: 'power3.out',
         },
-        '-=1.2' // Overlay beautifully during logo zoom tail
+        '-=0.9' // Overlap with mountain/mist reveal
       );
 
       // 5. Scroll hint fades in at the very end
@@ -238,7 +238,7 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/images/logo-v2.png" 
+            src="/images/logo-new.png" 
             alt="blüra Elevate yourself" 
             style={{ 
               width: 'clamp(240px, 40vw, 500px)', 

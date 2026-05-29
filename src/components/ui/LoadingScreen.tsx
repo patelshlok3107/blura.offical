@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
@@ -14,184 +14,121 @@ export default function LoadingScreen({
   onTransitionStart,
   onTransitionEnd,
 }: LoadingScreenProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dropRef = useRef<HTMLDivElement>(null);
-  const canRef = useRef<HTMLDivElement>(null);
-  const mountainRef = useRef<HTMLDivElement>(null);
-  const logoContainerRef = useRef<HTMLDivElement>(null);
-  const sweepRef = useRef<HTMLDivElement>(null);
-  const hasStarted = useRef(false);
+  const containerRef    = useRef<HTMLDivElement>(null);
+  const curtainRef      = useRef<HTMLDivElement>(null);
+  const logoRef         = useRef<HTMLImageElement>(null);
+  const taglineRef      = useRef<HTMLDivElement>(null);
+  const progressRef     = useRef<HTMLDivElement>(null);
+  const progressFillRef = useRef<HTMLDivElement>(null);
+  const glowRef         = useRef<HTMLDivElement>(null);
+  const hasStarted      = useRef(false);
 
-  // Store callbacks in refs to avoid stale closure in the GSAP timeline
   const cbStart = useRef(onTransitionStart);
-  const cbEnd = useRef(onTransitionEnd);
+  const cbEnd   = useRef(onTransitionEnd);
   useEffect(() => {
     cbStart.current = onTransitionStart;
-    cbEnd.current = onTransitionEnd;
+    cbEnd.current   = onTransitionEnd;
   });
 
   useEffect(() => {
     if (hasStarted.current) return;
     hasStarted.current = true;
 
-    const drop = dropRef.current;
-    const can = canRef.current;
-    const mountain = mountainRef.current;
-    const logo = logoContainerRef.current;
-    const sweep = sweepRef.current;
-    const container = containerRef.current;
+    const logo        = logoRef.current;
+    const tagline     = taglineRef.current;
+    const progress    = progressRef.current;
+    const progressFill = progressFillRef.current;
+    const glow        = glowRef.current;
+    const curtain     = curtainRef.current;
+    const container   = containerRef.current;
 
-    if (!drop || !can || !mountain || !logo || !sweep || !container) return;
+    if (!logo || !tagline || !progress || !progressFill || !glow || !curtain || !container) return;
 
     const tl = gsap.timeline();
 
-    // ═══════════════════════════════════════════════
-    // STAGE 1 — DROP APPEARS  (0 → 0.7s)
-    // A single water droplet materialises at center-top
-    // ═══════════════════════════════════════════════
+    // ── STAGE 1: Soft ambient glow pulses in behind logo (0 → 0.6s)
     tl.fromTo(
-      drop,
-      { opacity: 0, scale: 0.2, y: -140 },
-      { opacity: 1, scale: 1, y: -140, duration: 0.7, ease: 'power2.out' },
+      glow,
+      { opacity: 0, scale: 0.6 },
+      { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' },
+      0
     );
 
-    // ═══════════════════════════════════════════════
-    // STAGE 2 — DROP FALLS  (0.7 → 1.3s)
-    // Droplet accelerates downward with a slight stretch
-    // ═══════════════════════════════════════════════
-    tl.to(drop, {
-      y: 0,
-      scaleY: 1.25,
-      scaleX: 0.8,
-      duration: 0.6,
-      ease: 'power2.in',
-    });
-
-    // ═══════════════════════════════════════════════
-    // STAGE 3 — CAN IMPACT  (1.3 → ~2.8s)
-    // Droplet vanishes on "impact"; the blüra can appears
-    // with a subtle splash glow, then the can zooms in
-    // focusing on the logo area, and zooms back out
-    // ═══════════════════════════════════════════════
-    // Droplet vanishes
-    tl.to(drop, { opacity: 0, scale: 2.5, duration: 0.12, ease: 'power2.out' });
-
-    // Can appears with a subtle scale-up
-    tl.fromTo(
-      can,
-      { opacity: 0, scale: 0.6, y: 30 },
-      { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'back.out(1.4)' },
-    );
-
-    // Brief splash glow behind the can
-    tl.fromTo(
-      can.querySelector('.can-glow') as HTMLElement,
-      { opacity: 0, scale: 0.5 },
-      { opacity: 0.6, scale: 1.3, duration: 0.4, ease: 'power2.out' },
-      '-=0.6',
-    );
-    tl.to(
-      can.querySelector('.can-glow') as HTMLElement,
-      { opacity: 0, scale: 1.6, duration: 0.6, ease: 'power2.in' },
-    );
-
-    // Zoom INTO the logo area on the can (scale up + shift upward to center on the logo)
-    tl.to(can, {
-      scale: 2.2,
-      y: 60,
-      duration: 1.0,
-      ease: 'power2.inOut',
-    }, '-=0.3');
-
-    // Hold at zoom briefly, then zoom back out
-    tl.to(can, {
-      scale: 1,
-      y: 0,
-      duration: 0.8,
-      ease: 'power2.inOut',
-    }, '+=0.3');
-
-    // ═══════════════════════════════════════════════
-    // STAGE 4 — MIST RISES  (overlaps with zoom-out)
-    // Himalayan mountains emerge through soft mist
-    // ═══════════════════════════════════════════════
-    tl.fromTo(
-      mountain,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1.4, ease: 'power2.out' },
-      '-=0.8',
-    );
-
-    // Fade out the can as the mountains come in
-    tl.to(
-      can,
-      { opacity: 0, scale: 0.8, duration: 0.7, ease: 'power2.in' },
-      '-=1.2',
-    );
-
-    // ═══════════════════════════════════════════════
-    // STAGE 5 — LOGO REVEAL  (overlaps with stage 4)
-    // blüra logo fades in and scales to full size
-    // ═══════════════════════════════════════════════
+    // ── STAGE 2: Logo materialises — scale up from 0.82, blur clears (0 → 1.0s)
     tl.fromTo(
       logo,
-      { opacity: 0, scale: 0.82, y: 12 },
-      { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'power3.out' },
-      '-=0.6',
+      { opacity: 0, scale: 0.82, filter: 'blur(8px)' },
+      {
+        opacity: 1,
+        scale: 1,
+        filter: 'blur(0px)',
+        duration: 1.1,
+        ease: 'power3.out',
+      },
+      0.1
     );
 
-    // ═══════════════════════════════════════════════
-    // STAGE 6 — LIGHT SWEEP
-    // Bright highlight slides across the logo
-    // ═══════════════════════════════════════════════
+    // ── STAGE 3: Tagline slides up from below (0.7 → 1.4s)
     tl.fromTo(
-      sweep,
-      { x: '-100%' },
-      { x: '250%', duration: 0.9, ease: 'power2.inOut' },
-      '-=0.2',
+      tagline,
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
+      0.7
     );
 
-    // ═══════════════════════════════════════════════
-    // STAGE 7 — FADE TO LANDING
-    // Logo scales up hugely, everything fades out
-    // ═══════════════════════════════════════════════
-    tl.add(() => {
-      cbStart.current();
-    }, '+=0.35');
+    // ── STAGE 4: Progress bar track appears then fill sweeps left→right
+    tl.fromTo(
+      progress,
+      { opacity: 0, scaleX: 0.4 },
+      { opacity: 1, scaleX: 1, duration: 0.5, ease: 'power2.out' },
+      0.9
+    );
+    tl.fromTo(
+      progressFill,
+      { scaleX: 0 },
+      { scaleX: 1, duration: 1.4, ease: 'power1.inOut', transformOrigin: 'left center' },
+      1.0
+    );
 
-    tl.to(logo, {
-      scale: 10,
-      opacity: 0,
-      duration: 1.4,
-      ease: 'power4.inOut',
-    });
-
+    // ── STAGE 5: Glow breathes (subtle pulse once logo is visible)
     tl.to(
-      mountain,
-      { opacity: 0, duration: 0.9, ease: 'power2.in' },
-      '-=1.4',
+      glow,
+      { scale: 1.12, opacity: 0.7, duration: 0.9, ease: 'sine.inOut', yoyo: true, repeat: 1 },
+      1.2
     );
 
-    // ═══════════════════════════════════════════════
-    // STAGE 8 — SMOOTH TRANSITION (FINAL)
-    // Container disappears, hero section takes over
-    // ═══════════════════════════════════════════════
+    // ── STAGE 6: Brief hold then signal transition start
+    tl.add(() => { cbStart.current(); }, '+=0.1');
+
+    // ── STAGE 7: Logo + tagline scale-up & fade out (Alarisa zoom-out feel)
+    tl.to(
+      [logo, tagline],
+      { opacity: 0, scale: 1.08, duration: 0.65, ease: 'power2.in', stagger: 0 },
+    );
+    tl.to(glow, { opacity: 0, duration: 0.5, ease: 'power2.in' }, '-=0.6');
+    tl.to(progress, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '-=0.5');
+
+    // ── STAGE 8: Curtain slides UP — white panel lifts off to reveal the hero beneath
+    tl.fromTo(
+      curtain,
+      { yPercent: 0 },
+      {
+        yPercent: -100,
+        duration: 0.95,
+        ease: 'power3.inOut',
+        onComplete: () => { cbEnd.current(); },
+      },
+      '-=0.2'
+    );
+
+    // Also fade the main container out simultaneously for extra smoothness
     tl.to(
       container,
-      {
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.inOut',
-        onComplete: () => {
-          cbEnd.current();
-        },
-      },
-      '-=0.7',
+      { opacity: 0, duration: 0.3, ease: 'power2.inOut' },
+      '-=0.35'
     );
 
-    return () => {
-      tl.kill();
-    };
+    return () => { tl.kill(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -202,210 +139,105 @@ export default function LoadingScreen({
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background:
-          'linear-gradient(180deg, #dce5ef 0%, #e8eef5 25%, #f2f5f9 55%, #ffffff 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        overflow: 'hidden',
+        pointerEvents: 'none',
       }}
     >
-      {/* ── Mountain Background Layer ── */}
+      {/* ── White curtain panel (the one that slides up on exit) ── */}
       <div
-        ref={mountainRef}
+        ref={curtainRef}
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0,
-          willChange: 'opacity, transform',
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/mountains.png"
-          alt=""
-          loading="eager"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center 35%',
-          }}
-        />
-        {/* Top mist overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '35%',
-            background:
-              'linear-gradient(to bottom, rgba(220,229,239,0.95) 0%, rgba(232,238,245,0.6) 50%, transparent 100%)',
-            pointerEvents: 'none',
-          }}
-        />
-        {/* Bottom mist overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '45%',
-            background:
-              'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.85) 40%, transparent 100%)',
-            pointerEvents: 'none',
-          }}
-        />
-        {/* Side mist vignette */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 40%, rgba(255,255,255,0.7) 100%)',
-            pointerEvents: 'none',
-          }}
-        />
-      </div>
-
-      {/* ── Water Droplet ── */}
-      <div
-        ref={dropRef}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          marginLeft: '-15px',
-          marginTop: '-25px',
-          width: '30px',
-          height: '50px',
-          opacity: 0,
-          zIndex: 20,
-          willChange: 'transform, opacity',
-        }}
-      >
-        <svg width="30" height="50" viewBox="0 0 30 50" style={{ filter: 'drop-shadow(0px 10px 10px rgba(47,91,140,0.3))' }}>
-          <defs>
-            <radialGradient id="water-grad" cx="30%" cy="30%" r="70%">
-              <stop offset="0%" stopColor="rgba(255, 255, 255, 0.95)" />
-              <stop offset="25%" stopColor="rgba(255, 255, 255, 0.5)" />
-              <stop offset="60%" stopColor="rgba(180, 210, 240, 0.4)" />
-              <stop offset="90%" stopColor="rgba(47, 91, 140, 0.6)" />
-              <stop offset="100%" stopColor="rgba(20, 50, 90, 0.8)" />
-            </radialGradient>
-            <linearGradient id="highlight" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.9)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-            </linearGradient>
-            <filter id="liquid-glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="1.5" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
-          {/* Main Droplet Body (Teardrop shape) */}
-          <path 
-            d="M 15,2 C 15,2 28,25 28,35 C 28,43 22,48 15,48 C 8,48 2,43 2,35 C 2,25 15,2 15,2 Z" 
-            fill="url(#water-grad)" 
-            filter="url(#liquid-glow)"
-          />
-          {/* Inner Caustic Highlight */}
-          <path 
-            d="M 15,46 C 20,46 25,42 25,36 C 25,38 20,42 15,42 C 10,42 5,38 5,36 C 5,42 10,46 15,46 Z" 
-            fill="rgba(255,255,255,0.6)" 
-            filter="blur(1px)"
-          />
-          {/* Main Specular Highlight (Left side curve) */}
-          <path 
-            d="M 6,32 C 6,26 10,18 14,12 C 10,18 8,26 9,32 C 9,34 7,34 6,32 Z" 
-            fill="url(#highlight)" 
-            filter="blur(0.5px)"
-          />
-        </svg>
-      </div>
-
-      {/* ── Can Container (replaces ripple) ── */}
-      <div
-        ref={canRef}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          opacity: 0,
-          zIndex: 15,
-          willChange: 'transform, opacity',
+          background: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          flexDirection: 'column',
+          pointerEvents: 'all',
+          overflow: 'hidden',
         }}
       >
-        {/* Radial splash glow behind the can */}
+        {/* ── Ambient glow behind logo ── */}
         <div
-          className="can-glow"
+          ref={glowRef}
           style={{
             position: 'absolute',
-            width: '500px',
-            height: '500px',
+            width: 'clamp(340px, 50vw, 640px)',
+            height: 'clamp(340px, 50vw, 640px)',
             borderRadius: '50%',
             background:
-              'radial-gradient(circle, rgba(180,210,240,0.5) 0%, rgba(200,225,250,0.2) 40%, transparent 70%)',
+              'radial-gradient(ellipse at center, rgba(26, 54, 93, 0.06) 0%, rgba(26, 54, 93, 0.03) 45%, transparent 70%)',
             opacity: 0,
             pointerEvents: 'none',
           }}
         />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/can-droplets-v2.png"
-          alt="blüra can"
-          loading="eager"
-          style={{
-            height: 'clamp(280px, 50vh, 520px)',
-            width: 'auto',
-            display: 'block',
-            filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))',
-          }}
-        />
-      </div>
 
-      {/* ── Logo Container ── */}
-      <div
-        ref={logoContainerRef}
-        style={{
-          position: 'relative',
-          zIndex: 30,
-          opacity: 0,
-          willChange: 'transform, opacity',
-          transformOrigin: 'center center',
-          overflow: 'hidden',
-          borderRadius: '4px',
-        }}
-      >
+        {/* ── Logo ── */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/logo-v2.png"
+          ref={logoRef}
+          src="/images/logo-new.png"
           alt="blüra"
           loading="eager"
           style={{
-            width: 'clamp(220px, 32vw, 420px)',
+            width: 'clamp(200px, 28vw, 380px)',
             height: 'auto',
             display: 'block',
-          }}
+            opacity: 0,
+            position: 'relative',
+            zIndex: 2,
+            userSelect: 'none',
+            WebkitUserDrag: 'none',
+          } as React.CSSProperties}
         />
-        {/* Light sweep overlay */}
+
+        {/* ── Tagline ── */}
         <div
-          ref={sweepRef}
+          ref={taglineRef}
+          style={{
+            marginTop: '4px',
+            opacity: 0,
+            position: 'relative',
+            zIndex: 2,
+            fontFamily: "'Inter', sans-serif",
+            fontSize: 'clamp(9px, 1.1vw, 12px)',
+            fontWeight: 500,
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
+            color: '#1a365d',
+          }}
+        >
+          Elevate Yourself
+        </div>
+
+        {/* ── Progress bar ── */}
+        <div
+          ref={progressRef}
           style={{
             position: 'absolute',
-            inset: 0,
-            background:
-              'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0.7) 48%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.7) 52%, rgba(255,255,255,0.15) 70%, transparent 100%)',
-            transform: 'translateX(-100%)',
-            pointerEvents: 'none',
+            bottom: 'clamp(36px, 5vh, 56px)',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 'clamp(100px, 18vw, 180px)',
+            height: '1px',
+            background: 'rgba(26, 54, 93, 0.12)',
+            borderRadius: '1px',
+            overflow: 'hidden',
+            opacity: 0,
           }}
-        />
+        >
+          <div
+            ref={progressFillRef}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: '#1a365d',
+              borderRadius: '1px',
+              transformOrigin: 'left center',
+              transform: 'scaleX(0)',
+            }}
+          />
+        </div>
       </div>
     </div>
   );

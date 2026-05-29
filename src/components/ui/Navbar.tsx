@@ -77,7 +77,7 @@ export default function Navbar() {
               alignItems: 'center', 
               height: '40px', 
             }}>
-              <img src="/images/logo-v2.png" alt="blüra" style={{ 
+              <img src="/images/logo-new.png" alt="blüra" style={{ 
                 width: isMobile ? '120px' : '150px', 
                 height: 'auto',
                 maxWidth: 'none',
@@ -202,7 +202,7 @@ export default function Navbar() {
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <img src="/images/logo-v2.png" alt="blüra" style={{ width: '200px', height: 'auto', maxWidth: 'none' }} />
+            <img src="/images/logo-new.png" alt="blüra" style={{ width: '200px', height: 'auto', maxWidth: 'none' }} />
           </div>
 
           {/* Nav links */}
