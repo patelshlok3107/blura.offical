@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/product', label: 'Product' },
+  { href: '/alkaline-water', label: 'Alkaline Water', isNew: true },
   { href: '/about', label: 'About' },
   { href: '/sustainability', label: 'Sustainability' },
   { href: '/contact', label: 'Contact' },
@@ -105,6 +106,11 @@ export default function Navbar() {
                   }}
                 >
                   {link.label}
+                  {link.isNew && (
+                    <span className="badge-new" style={{ position: 'absolute', top: '-10px', right: '-24px' }}>
+                      NEW
+                    </span>
+                  )}
                   {pathname === link.href && (
                     <span style={{
                       position: 'absolute',
@@ -116,7 +122,7 @@ export default function Navbar() {
                 </Link>
               ))}
               <a
-                href="https://wa.me/917990394138?text=Hi,%20I%E2%80%99m%20interested%20in%20ordering%20bl%C3%BCra%20mineral%20water%20in%20bulk.%20Please%20share%20details."
+                href="https://wa.me/917990394138?text=Hi,%20I%E2%80%99m%20interested%20in%20ordering%20bl%C3%BCra%20products%20in%20bulk.%20Please%20share%20details."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"

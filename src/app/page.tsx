@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import HeroSection from '@/components/sections/HeroSection';
+import AlkalineTeaser from '@/components/sections/AlkalineTeaser';
 import PourSection from '@/components/sections/PourSection';
 import GlassSection from '@/components/sections/GlassSection';
 import FeaturesSection from '@/components/sections/FeaturesSection';
@@ -41,6 +42,7 @@ export default function HomePage() {
         />
       )}
       <HeroSection loadingState={loadingState} />
+      <AlkalineTeaser />
       <PourSection />
       <GlassSection />
       <FeaturesSection />
