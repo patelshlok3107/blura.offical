@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import AlkalineHeroSection from '@/components/sections/AlkalineHeroSection';
-import AlkalineScienceSection from '@/components/sections/AlkalineScienceSection';
 import AlkalineLifestyleSection from '@/components/sections/AlkalineLifestyleSection';
 import AlkalineSubscribeSection from '@/components/sections/AlkalineSubscribeSection';
 
@@ -36,7 +35,6 @@ export default function AlkalineWaterPage() {
       )}
       <div style={{ opacity: loadingState === 'loaded' ? 1 : 0, transition: 'opacity 0.8s ease' }}>
         <AlkalineHeroSection />
-        <AlkalineScienceSection />
         <AlkalineLifestyleSection />
         <AlkalineSubscribeSection />
       </div>

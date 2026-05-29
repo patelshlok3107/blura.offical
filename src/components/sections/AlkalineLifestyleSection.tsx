@@ -12,7 +12,7 @@ const lifestyles = [
   { img: 'lifestyle-family.png', title: 'Healthy Families', text: 'Pure, safe, and balanced water for your loved ones.' },
   { img: 'lifestyle-office.png', title: 'Offices & Workplaces', text: 'Keep your team energized and focused all day long.' },
   { img: 'lifestyle-gym.png', title: 'Gyms & Fitness Centers', text: 'Premium hydration for premium performance.' },
-  { img: 'lifestyle-cafe.png', title: 'Cafes & Restaurants', text: 'Elevate your dining experience with blüra.' },
+  { img: 'lifestyle-cafe.jpg', title: 'Cafes & Restaurants', text: 'Elevate your dining experience with blüra.' },
 ];
 
 export default function AlkalineLifestyleSection() {
@@ -84,43 +84,6 @@ export default function AlkalineLifestyleSection() {
               backgroundPosition: 'center',
               transition: 'transform 0.5s ease',
             }} className="lifestyle-bg" />
-
-            {/* Gradient Overlay */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(to top, rgba(12,29,54,0.9) 0%, rgba(12,29,54,0) 100%)',
-              transition: 'background 0.3s ease',
-            }} className="lifestyle-overlay" />
-
-            {/* Content */}
-            <div style={{
-              position: 'absolute',
-              bottom: '0',
-              left: '0',
-              right: '0',
-              padding: '32px 24px',
-              color: 'white',
-              transform: 'translateY(20px)',
-              transition: 'transform 0.4s ease',
-            }} className="lifestyle-content">
-              <h3 style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: '24px',
-                fontWeight: '400',
-                marginBottom: '8px',
-              }}>{item.title}</h3>
-              <p style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: '13px',
-                fontWeight: '300',
-                lineHeight: 1.6,
-                opacity: 0,
-                transition: 'opacity 0.4s ease',
-              }} className="lifestyle-desc">
-                {item.text}
-              </p>
-            </div>
           </div>
         ))}
       </div>
@@ -131,15 +94,6 @@ export default function AlkalineLifestyleSection() {
         }
         .lifestyle-card:hover .lifestyle-bg {
           transform: scale(1.05);
-        }
-        .lifestyle-card:hover .lifestyle-overlay {
-          background: linear-gradient(to top, rgba(12,29,54,0.95) 0%, rgba(12,29,54,0.2) 100%);
-        }
-        .lifestyle-card:hover .lifestyle-content {
-          transform: translateY(0);
-        }
-        .lifestyle-card:hover .lifestyle-desc {
-          opacity: 1;
         }
       `}</style>
     </section>
