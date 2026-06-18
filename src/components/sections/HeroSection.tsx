@@ -9,7 +9,6 @@ interface HeroSectionProps {
 export default function HeroSection({ loadingState }: HeroSectionProps) {
   const canRef = useRef<HTMLDivElement>(null);
   const mistRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const mountainsRef = useRef<HTMLDivElement>(null);
   const scrollHintRef = useRef<HTMLDivElement>(null);
@@ -50,28 +49,13 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
     if (loadingState === 'transitioning') {
       const tl = gsap.timeline();
 
-      // 1. Logo fades + slides up as curtain lifts
-      tl.fromTo(logoRef.current,
-        {
-          opacity: 0,
-          y: 18,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.0,
-          ease: 'power3.out',
-        }
-      );
-
-      // 2. Background image fade-in (matches curtain lift timing)
+      // 1. Background image fade-in (matches curtain lift timing)
       tl.fromTo(bgRef.current,
         { opacity: 0 },
-        { opacity: 0.35, duration: 1.6, ease: 'power2.out' },
-        '-=1.0' // Overlap with logo reveal
+        { opacity: 0.35, duration: 1.6, ease: 'power2.out' }
       );
 
-      // 3. Mountains and mist fade in
+      // 2. Mountains and mist fade in
       tl.fromTo(mountainsRef.current,
         { opacity: 0, y: 20 },
         { opacity: 0.07, y: 0, duration: 1.2, ease: 'power2.out' },
@@ -83,7 +67,7 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
         '-=1.2'
       );
 
-      // 4. Can container fades in and slides up
+      // 3. Can container fades in and slides up — the hero centrepiece
       tl.fromTo(canRef.current,
         {
           opacity: 0,
@@ -97,10 +81,10 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
           duration: 1.2,
           ease: 'power3.out',
         },
-        '-=0.9' // Overlap with mountain/mist reveal
+        '-=0.9'
       );
 
-      // 5. Scroll hint fades in at the very end
+      // 4. Scroll hint fades in at the very end
       tl.fromTo(scrollHintRef.current,
         {
           opacity: 0,
@@ -116,7 +100,7 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
       );
     } else if (loadingState === 'loaded') {
       // Safe fallback state in case transition finishes or direct loads
-      gsap.set([logoRef.current, bgRef.current, canRef.current, scrollHintRef.current], {
+      gsap.set([bgRef.current, canRef.current, scrollHintRef.current], {
         opacity: 1,
         scale: 1,
         y: 0
@@ -226,28 +210,7 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
           alignItems: 'center',
         }}
       >
-        {/* Main Logo Container */}
-        <div 
-          ref={logoRef}
-          style={{
-            opacity: 0, // Handled by GSAP
-            marginBottom: '60px',
-            transformOrigin: 'center center',
-            willChange: 'transform, opacity',
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img 
-            src="/images/logo-new.png" 
-            alt="blüra Elevate yourself" 
-            style={{ 
-              width: 'clamp(240px, 40vw, 500px)', 
-              height: 'auto'
-            }} 
-          />
-        </div>
-
-        {/* Can Container */}
+        {/* Can Container — hero centrepiece */}
         <div
           ref={canRef}
           style={{
@@ -276,10 +239,10 @@ export default function HeroSection({ loadingState }: HeroSectionProps) {
           {/* Actual can image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/can-droplets-v2.png"
+            src="/images/can-white.png"
             alt="blüra Premium Mineral Water"
             style={{
-              width: 'clamp(180px, 22vw, 300px)',
+              width: 'clamp(200px, 25vw, 320px)',
               height: 'auto',
               filter: 'drop-shadow(0 30px 80px rgba(47, 91, 140, 0.2)) drop-shadow(0 8px 30px rgba(0,0,0,0.1))',
               position: 'relative',

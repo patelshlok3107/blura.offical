@@ -17,7 +17,6 @@ export default function LoadingScreen({
   const containerRef    = useRef<HTMLDivElement>(null);
   const curtainRef      = useRef<HTMLDivElement>(null);
   const logoRef         = useRef<HTMLImageElement>(null);
-  const taglineRef      = useRef<HTMLDivElement>(null);
   const progressRef     = useRef<HTMLDivElement>(null);
   const progressFillRef = useRef<HTMLDivElement>(null);
   const glowRef         = useRef<HTMLDivElement>(null);
@@ -35,14 +34,13 @@ export default function LoadingScreen({
     hasStarted.current = true;
 
     const logo        = logoRef.current;
-    const tagline     = taglineRef.current;
     const progress    = progressRef.current;
     const progressFill = progressFillRef.current;
     const glow        = glowRef.current;
     const curtain     = curtainRef.current;
     const container   = containerRef.current;
 
-    if (!logo || !tagline || !progress || !progressFill || !glow || !curtain || !container) return;
+    if (!logo || !progress || !progressFill || !glow || !curtain || !container) return;
 
     const tl = gsap.timeline();
 
@@ -66,14 +64,6 @@ export default function LoadingScreen({
         ease: 'power3.out',
       },
       0.1
-    );
-
-    // ── STAGE 3: Tagline slides up from below (0.7 → 1.4s)
-    tl.fromTo(
-      tagline,
-      { opacity: 0, y: 14 },
-      { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
-      0.7
     );
 
     // ── STAGE 4: Progress bar track appears then fill sweeps left→right
@@ -100,10 +90,10 @@ export default function LoadingScreen({
     // ── STAGE 6: Brief hold then signal transition start
     tl.add(() => { cbStart.current(); }, '+=0.1');
 
-    // ── STAGE 7: Logo + tagline scale-up & fade out (Alarisa zoom-out feel)
+    // ── STAGE 7: Logo scale-up & fade out (Alarisa zoom-out feel)
     tl.to(
-      [logo, tagline],
-      { opacity: 0, scale: 1.08, duration: 0.65, ease: 'power2.in', stagger: 0 },
+      logo,
+      { opacity: 0, scale: 1.08, duration: 0.65, ease: 'power2.in' },
     );
     tl.to(glow, { opacity: 0, duration: 0.5, ease: 'power2.in' }, '-=0.6');
     tl.to(progress, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '-=0.5');
@@ -191,24 +181,7 @@ export default function LoadingScreen({
           } as React.CSSProperties}
         />
 
-        {/* ── Tagline ── */}
-        <div
-          ref={taglineRef}
-          style={{
-            marginTop: '4px',
-            opacity: 0,
-            position: 'relative',
-            zIndex: 2,
-            fontFamily: "'Inter', sans-serif",
-            fontSize: 'clamp(9px, 1.1vw, 12px)',
-            fontWeight: 500,
-            letterSpacing: '0.28em',
-            textTransform: 'uppercase',
-            color: '#1a365d',
-          }}
-        >
-          Elevate Yourself
-        </div>
+
 
         {/* ── Progress bar ── */}
         <div

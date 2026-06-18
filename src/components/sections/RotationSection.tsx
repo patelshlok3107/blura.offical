@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useRef, useState } from 'react';
 
 export default function RotationShowcase() {
@@ -84,7 +84,7 @@ export default function RotationShowcase() {
             {/* Front image — visible when facing front */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/can-droplets-v2.png"
+              src="/images/can-white.png"
               alt="blüra front view"
               style={{
                 width: '100%',

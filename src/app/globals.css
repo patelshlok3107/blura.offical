@@ -528,7 +528,7 @@ h1, h2, h3, .display {
   .custom-cursor {
     width: 24px;
     height: 60px;
-    background-image: url('/images/can-droplets-v2.png');
+    background-image: url('/images/can-white.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

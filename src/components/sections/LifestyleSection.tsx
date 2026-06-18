@@ -103,7 +103,7 @@ export default function LifestyleSection() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/can-droplets-v2.png"
+            src="/images/can-white.png"
             alt="blüra premium can with condensation droplets"
             style={{
               width: '100%',

@@ -61,7 +61,10 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 900,
-          padding: scrolled ? '14px clamp(20px, 5vw, 48px)' : 'clamp(18px, 3vw, 28px) clamp(20px, 5vw, 48px)',
+          paddingTop: scrolled ? '14px' : 'clamp(18px, 3vw, 28px)',
+          paddingBottom: scrolled ? '14px' : 'clamp(18px, 3vw, 28px)',
+          paddingLeft: 'clamp(32px, 6vw, 64px)',
+          paddingRight: 'clamp(24px, 5vw, 56px)',
           transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           background: scrolled ? '#ffffff' : 'transparent',
           backdropFilter: 'none',
@@ -69,7 +72,7 @@ export default function Navbar() {
           boxShadow: scrolled ? '0 4px 30px rgba(28, 53, 87, 0.05)' : 'none',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1400px', width: '100%', margin: '0 auto' }}>
 
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none' }}>
